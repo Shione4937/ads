@@ -10,9 +10,9 @@ st.subheader("クライアント管理")
 st.info("本番環境ではGoogleスプレッドシートと連携してクライアント一覧・アカウントIDを管理します。")
 
 clients_data = {
-    "東信自動車":       {"google_id":"—","yahoo_id":"—","meta_id":"—","tiktok_id":"—","target_cpa":5000,"target_cv":200},
-    "サンライズモータース":{"google_id":"—","yahoo_id":"—","meta_id":"—","tiktok_id":"—","target_cpa":8000,"target_cv":150},
-    "カーライフ中部":    {"google_id":"—","yahoo_id":"—","meta_id":"—","tiktok_id":"—","target_cpa":6000,"target_cv":120},
+    "船井自動車販売":       {"google_id":"—","yahoo_id":"—","meta_id":"—","tiktok_id":"—","target_cpa":5000,"target_cv":200},
+    "フナイモータース":{"google_id":"—","yahoo_id":"—","meta_id":"—","tiktok_id":"—","target_cpa":8000,"target_cv":150},
+    "カーライフ船井":    {"google_id":"—","yahoo_id":"—","meta_id":"—","tiktok_id":"—","target_cpa":6000,"target_cv":120},
 }
 import pandas as pd
 df = pd.DataFrame(clients_data).T.reset_index()

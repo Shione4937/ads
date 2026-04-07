@@ -8,7 +8,7 @@ from datetime import date
 sys.path.insert(0, str(Path(__file__).parent))
 from loader import load_demo, get_summary, get_monthly_trend, TODAY
 
-client = st.session_state.get("client", "東信自動車")
+client = st.session_state.get("client", "船井自動車販売")
 period = st.session_state.get("period", "今月（4月）")
 
 PERIOD_MAP = {

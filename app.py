@@ -15,9 +15,14 @@ html, body, [class*="css"] {
     font-family: 'Inter', 'Noto Sans JP', sans-serif;
 }
 
+/* ===== Streamlit デフォルトヘッダー非表示 ===== */
+header[data-testid="stHeader"] {
+    display: none !important;
+}
+
 /* ===== ページ余白調整 ===== */
 .block-container {
-    padding-top: 2rem !important;
+    padding-top: 1.5rem !important;
     padding-bottom: 1rem !important;
 }
 

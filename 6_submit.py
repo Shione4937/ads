@@ -77,51 +77,27 @@ if step == 1:
     st.markdown("**成果指標**")
     st.caption("広告配信で重視する成果を選んでください")
 
-    # 成果指標（3カード）
+    # 成果指標（3カード・クリックで選択）
     current_kpi = data.get("kpi", "クリック")
+    # KPIボタン専用のCSSスコープマーカー
+    st.markdown('<div class="kpi-marker"></div>', unsafe_allow_html=True)
     k1, k2, k3 = st.columns(3)
 
-    with k1:
-        sel = "selected" if current_kpi == "クリック" else ""
-        st.markdown(f"""
-        <div class="kpi-card {sel}">
-            <div class="kpi-icon">🖱️</div>
-            <div class="kpi-title">クリック</div>
-            <div class="kpi-desc">Webサイトへのアクセスを重視</div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("選択", key="kpi_click", use_container_width=True):
-            data["kpi"] = "クリック"
-            st.session_state["submit_data"] = data
-            st.rerun()
+    kpi_options = [
+        ("クリック", "🖱️", "Webサイトへのアクセスを重視", "kpi_click"),
+        ("コンバージョン", "🎯", "資料請求・購入などWebサイト上での成果を重視", "kpi_cv"),
+        ("収益", "💰", "売上金額など1コンバージョン毎の価値を重視", "kpi_revenue"),
+    ]
 
-    with k2:
-        sel = "selected" if current_kpi == "コンバージョン" else ""
-        st.markdown(f"""
-        <div class="kpi-card {sel}">
-            <div class="kpi-icon">🎯</div>
-            <div class="kpi-title">コンバージョン</div>
-            <div class="kpi-desc">資料請求・購入などWebサイト上での成果を重視</div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("選択", key="kpi_cv", use_container_width=True):
-            data["kpi"] = "コンバージョン"
-            st.session_state["submit_data"] = data
-            st.rerun()
-
-    with k3:
-        sel = "selected" if current_kpi == "収益" else ""
-        st.markdown(f"""
-        <div class="kpi-card {sel}">
-            <div class="kpi-icon">💰</div>
-            <div class="kpi-title">収益（コンバージョン値）</div>
-            <div class="kpi-desc">売上金額など1コンバージョン毎の価値を重視</div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("選択", key="kpi_revenue", use_container_width=True):
-            data["kpi"] = "収益"
-            st.session_state["submit_data"] = data
-            st.rerun()
+    for col, (name, icon, desc, key) in zip([k1, k2, k3], kpi_options):
+        with col:
+            is_selected = current_kpi == name
+            label = f"{icon}   {name}\n\n{desc}"
+            btn_type = "primary" if is_selected else "secondary"
+            if st.button(label, key=key, use_container_width=True, type=btn_type):
+                data["kpi"] = name
+                st.session_state["submit_data"] = data
+                st.rerun()
 
     st.write("")
     st.markdown("**月額予算**")

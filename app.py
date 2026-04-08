@@ -71,17 +71,17 @@ header[data-testid="stHeader"] {
     background: rgba(124,58,237,0.06) !important;
 }
 
-/* ===== メトリックカード ===== */
+/* ===== メトリックカード（KPIカード） ===== */
 [data-testid="stMetric"] {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 8px 4px;
-    box-shadow: none;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: box-shadow 0.15s ease;
 }
 [data-testid="stMetric"]:hover {
-    box-shadow: none;
-    transform: none;
+    box-shadow: 0 3px 12px rgba(99,102,241,0.1);
 }
 [data-testid="stMetricLabel"] {
     color: #9ca3af !important;

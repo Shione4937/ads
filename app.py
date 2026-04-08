@@ -21,28 +21,18 @@ html, body, [class*="css"] {
     padding-bottom: 1rem !important;
 }
 
-/* ===== ヘッダーバナー ===== */
-.adboard-header {
-    background: linear-gradient(135deg, #a78bfa 0%, #7c6bf6 35%, #6366f1 65%, #60a5fa 100%);
-    border-radius: 14px;
-    padding: 18px 28px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 4px 20px rgba(124,107,246,0.18);
-}
-.adboard-header h1 {
-    color: #ffffff;
-    font-size: 22px;
+/* ===== ヘッダー ===== */
+.adboard-title {
+    font-size: 26px;
     font-weight: 700;
+    color: #4338ca;
     margin: 0;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
-.adboard-header p {
-    color: rgba(255,255,255,0.85);
-    font-size: 13px;
-    margin: 2px 0 0 0;
+.adboard-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 2px 0 8px 0;
 }
 
 /* ===== タブスタイル ===== */
@@ -215,16 +205,12 @@ if "period" not in st.session_state:
 
 # ─── ヘッダー ───
 st.markdown("""
-<div class="adboard-header">
-    <div>
-        <h1>📊 AdBoard</h1>
-        <p>広告統合ダッシュボード — Google / Yahoo / Meta / TikTok</p>
-    </div>
-</div>
+<p class="adboard-title">AdBoard</p>
+<p class="adboard-subtitle">広告統合管理ダッシュボード</p>
 """, unsafe_allow_html=True)
 
-# 会社選択（ヘッダー下）
-_, col_client = st.columns([7, 2])
+# タブナビ + 会社選択（同じ行）
+col_tabs, col_client = st.columns([8, 2])
 with col_client:
     selected_client = st.selectbox(
         "クライアント選択", get_clients(),

@@ -25,7 +25,7 @@ for _, row in df.iterrows():
         badges += '<span style="background:#e0f2fe;color:#0284c7;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;margin-left:6px;">Meta未計測</span>'
 
     with st.container(border=True):
-        c1, c2, c3, c4, c5, c6, c7 = st.columns([2.5, 2, 2, 1, 2, 2, 1])
+        c1, c2, c3, c4, c5, c6, c7 = st.columns([2, 2.5, 2, 1, 2, 1.5, 1])
         with c1:
             st.markdown(f"**{row['client']}**", unsafe_allow_html=True)
             if badges:

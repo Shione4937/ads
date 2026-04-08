@@ -43,7 +43,7 @@ for i, (num, label) in enumerate(STEPS):
     if num < step:
         circle_class = "step-circle done"
         label_class = "step-label"
-        mark = "✓"
+        mark = str(num)
     elif num == step:
         circle_class = "step-circle active"
         label_class = "step-label active"
@@ -83,15 +83,15 @@ if step == 1:
     k1, k2, k3 = st.columns(3)
 
     kpi_options = [
-        ("クリック", "🖱️", "Webサイトへのアクセスを重視", "kpi_click"),
-        ("コンバージョン", "🎯", "資料請求・購入などWebサイト上での成果を重視", "kpi_cv"),
-        ("収益", "💰", "売上金額など1コンバージョン毎の価値を重視", "kpi_revenue"),
+        ("クリック", "Webサイトへのアクセスを重視", "kpi_click"),
+        ("コンバージョン", "資料請求・購入などWebサイト上での成果を重視", "kpi_cv"),
+        ("収益", "売上金額など1コンバージョン毎の価値を重視", "kpi_revenue"),
     ]
 
-    for col, (name, icon, desc, key) in zip([k1, k2, k3], kpi_options):
+    for col, (name, desc, key) in zip([k1, k2, k3], kpi_options):
         with col:
             is_selected = current_kpi == name
-            label = f"{icon}   {name}\n\n{desc}"
+            label = f"{name}\n\n{desc}"
             btn_type = "primary" if is_selected else "secondary"
             if st.button(label, key=key, use_container_width=True, type=btn_type):
                 data["kpi"] = name
@@ -186,7 +186,7 @@ elif step == 2:
     st.write("")
     connected_count = sum(1 for v in connections.values() if v)
     if connected_count == 0:
-        st.warning("⚠️ 最低1つの媒体を連携してください（デモ版では「連携する」ボタンで疑似連携できます）")
+        st.warning("最低1つの媒体を連携してください（デモ版では「連携する」ボタンで疑似連携できます）")
 
     st.divider()
     nav_l, _, nav_r = st.columns([1, 6, 1])
@@ -215,15 +215,15 @@ elif step == 3:
     d1, d2, d3 = st.columns(3)
 
     device_options = [
-        ("pc",         "💻", "PC",           "デスクトップ・ノートPC", "dev_pc"),
-        ("smartphone", "📱", "スマートフォン", "iPhone・Android",       "dev_sp"),
-        ("tablet",     "📲", "タブレット",    "iPad・Androidタブレット", "dev_tab"),
+        ("pc",         "PC",           "デスクトップ・ノートPC", "dev_pc"),
+        ("smartphone", "スマートフォン", "iPhone・Android",       "dev_sp"),
+        ("tablet",     "タブレット",    "iPad・Androidタブレット", "dev_tab"),
     ]
 
-    for col, (did, icon, name, desc, key) in zip([d1, d2, d3], device_options):
+    for col, (did, name, desc, key) in zip([d1, d2, d3], device_options):
         with col:
             is_selected = devices.get(did, True)
-            label = f"{icon}   {name}\n\n{desc}"
+            label = f"{name}\n\n{desc}"
             btn_type = "primary" if is_selected else "secondary"
             if st.button(label, key=key, use_container_width=True, type=btn_type):
                 devices[did] = not is_selected
@@ -263,15 +263,15 @@ elif step == 4:
     a1, a2, a3 = st.columns(3)
 
     area_options = [
-        ("店舗集客",    "📍", "店舗に集客したい方",   "店舗を指定してピンポイント配信", "area_store"),
-        ("都道府県指定", "🗾", "都道府県で指定",      "配信する都道府県を選択",       "area_pref"),
-        ("指定しない",   "🌐", "指定しない",         "全国配信",                   "area_none"),
+        ("店舗集客",    "店舗に集客したい方",   "店舗を指定してピンポイント配信", "area_store"),
+        ("都道府県指定", "都道府県で指定",      "配信する都道府県を選択",       "area_pref"),
+        ("指定しない",   "指定しない",         "全国配信",                   "area_none"),
     ]
 
-    for col, (mode_name, icon, name, desc, key) in zip([a1, a2, a3], area_options):
+    for col, (mode_name, name, desc, key) in zip([a1, a2, a3], area_options):
         with col:
             is_selected = area_mode == mode_name
-            label = f"{icon}   {name}\n\n{desc}"
+            label = f"{name}\n\n{desc}"
             btn_type = "primary" if is_selected else "secondary"
             if st.button(label, key=key, use_container_width=True, type=btn_type):
                 data["area_mode"] = mode_name
@@ -329,7 +329,7 @@ elif step == 4:
             data["selected_prefs"] = new_selected
 
     else:
-        st.info("🌐 全国に広告を配信します")
+        st.info("全国に広告を配信します")
 
     st.session_state["submit_data"] = data
     st.divider()
@@ -582,14 +582,14 @@ elif step == 7:
             st.session_state["submit_step"] = 6
             st.rerun()
     with nav_r:
-        if st.button("✨ 入稿する", type="primary", use_container_width=True,
+        if st.button("入稿する", type="primary", use_container_width=True,
                      key="submit_final", disabled=not confirmed):
             st.session_state["submit_completed"] = True
             st.rerun()
 
     # 完了表示
     if st.session_state.get("submit_completed"):
-        st.success("✅ **入稿完了しました**（デモ版）")
+        st.success("**入稿完了しました**（デモ版）")
         st.info("実際のAPI連携後は、各媒体に自動入稿され配信が開始されます。")
         st.balloons()
         if st.button("新しい入稿を作成", key="new_submit"):

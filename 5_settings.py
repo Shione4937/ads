@@ -23,7 +23,7 @@ if st.button("保存", type="primary"):
         st.error("1社以上選択してください")
     else:
         st.session_state["selected_clients"] = selected
-        st.success(f"✅ {len(selected)}社を設定しました")
+        st.success(f"{len(selected)}社を設定しました")
 
 st.divider()
 
@@ -38,7 +38,7 @@ api_items = {
 }
 
 for platform, info in api_items.items():
-    with st.expander(f"🔸 {platform} — 未連携"):
+    with st.expander(f"{platform} — 未連携"):
         st.markdown(f"**申請方法：** {info['note']}")
         st.markdown("""連携後に利用可能：
 - データ自動取得（手動CSV不要）

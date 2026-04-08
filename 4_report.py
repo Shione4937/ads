@@ -33,7 +33,7 @@ st.markdown(f"""
 <div style="background:linear-gradient(135deg, #f5f3ff 0%, #eef2ff 50%, #f0f9ff 100%);
             border:1px solid rgba(124,107,246,0.15);border-radius:12px;padding:18px 22px;margin:16px 0;">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-        <span style="font-size:18px;">🤖</span>
+        <span style="font-size:18px;"></span>
         <span style="font-weight:700;color:#4338ca;">AI期間比較コメント</span>
         <span style="background:linear-gradient(135deg,#7c6bf6,#60a5fa);color:#fff;font-size:10px;
                      padding:2px 8px;border-radius:6px;font-weight:600;">Gemini連携予定</span>
@@ -64,8 +64,8 @@ st.markdown("**CSVエクスポート**")
 c1, c2 = st.columns(2)
 with c1:
     all_df = load_demo(client=client)
-    st.download_button("📥 全期間データ CSV", all_df.to_csv(index=False, encoding="utf-8-sig"),
+    st.download_button("全期間データ CSV", all_df.to_csv(index=False, encoding="utf-8-sig"),
                        f"{client}_all.csv", "text/csv")
 with c2:
-    st.download_button("📥 サマリー CSV", get_summary(all_df).to_csv(index=False, encoding="utf-8-sig"),
+    st.download_button("サマリー CSV", get_summary(all_df).to_csv(index=False, encoding="utf-8-sig"),
                        f"{client}_summary.csv", "text/csv")

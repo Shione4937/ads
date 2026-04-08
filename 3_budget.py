@@ -30,7 +30,7 @@ c2.metric("消化済",         f"¥{total_used:,.0f}",    f"{total_used/total_bu
 c3.metric("残予算",         f"¥{total_remaining:,.0f}", f"残{days_remaining}日")
 c4.metric("日次按分目安",   f"¥{total_target:,.0f}",  f"現状¥{total_pace:,.0f}/日")
 c5.metric("月末着地予測",   f"¥{total_projected:,.0f}",
-          "予算内 ✓" if total_projected <= total_budget else f"超過 ¥{total_projected-total_budget:,.0f}")
+          "予算内" if total_projected <= total_budget else f"超過 ¥{total_projected-total_budget:,.0f}")
 
 st.divider()
 
@@ -40,7 +40,7 @@ st.markdown(f"""
 <div style="background:linear-gradient(135deg, #f5f3ff 0%, #eef2ff 50%, #f0f9ff 100%);
             border:1px solid rgba(124,107,246,0.15);border-radius:12px;padding:18px 22px;margin-bottom:16px;">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-        <span style="font-size:18px;">🤖</span>
+        <span style="font-size:18px;"></span>
         <span style="font-weight:700;color:#4338ca;">AI予測コメント</span>
         <span style="background:linear-gradient(135deg,#7c6bf6,#60a5fa);color:#fff;font-size:10px;
                      padding:2px 8px;border-radius:6px;font-weight:600;">Gemini連携予定</span>

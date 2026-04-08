@@ -12,12 +12,11 @@ data = st.session_state.get("submit_data", {})
 STEPS = [
     (1, "基本情報"),
     (2, "連携設定"),
-    (3, "商材登録"),
-    (4, "デバイス"),
-    (5, "エリア"),
-    (6, "ターゲット"),
-    (7, "広告文"),
-    (8, "確認・送信"),
+    (3, "デバイス"),
+    (4, "エリア"),
+    (5, "ターゲット"),
+    (6, "広告文"),
+    (7, "確認・送信"),
 ]
 
 # ─── ヘッダー ───
@@ -203,75 +202,9 @@ elif step == 2:
 
 
 # ========================================
-# Step 3: 商材登録
+# Step 3: デバイス
 # ========================================
 elif step == 3:
-    st.markdown("##### 商材登録")
-    st.caption("広告で宣伝する商材・サービスの情報を登録してください")
-    st.write("")
-
-    product_name = st.text_input(
-        "商材・サービス名",
-        value=data.get("product_name", ""),
-        placeholder="例）クラウド広告運用ツール AdBoard",
-    )
-
-    landing_url = st.text_input(
-        "ランディングページURL",
-        value=data.get("landing_url", ""),
-        placeholder="例）https://example.com/lp",
-    )
-
-    description = st.text_area(
-        "商材の説明",
-        value=data.get("description", ""),
-        placeholder="サービスの特徴・強み・ターゲットユーザーなどを記入してください",
-        height=120,
-    )
-
-    st.write("")
-    col_brand, col_industry = st.columns(2)
-    with col_brand:
-        brand_name = st.text_input(
-            "ブランド名 / 会社名",
-            value=data.get("brand_name", ""),
-            placeholder="例）株式会社ABC",
-        )
-    with col_industry:
-        industry = st.selectbox(
-            "業種",
-            ["選択してください", "IT・通信", "金融・保険", "不動産", "小売・EC",
-             "医療・ヘルスケア", "教育", "飲食", "自動車", "美容・コスメ", "その他"],
-            index=0 if not data.get("industry") else
-                  ["選択してください", "IT・通信", "金融・保険", "不動産", "小売・EC",
-                   "医療・ヘルスケア", "教育", "飲食", "自動車", "美容・コスメ", "その他"].index(data.get("industry")),
-        )
-
-    st.divider()
-    nav_l, _, nav_r = st.columns([1, 6, 1])
-    with nav_l:
-        if st.button("← 戻る", use_container_width=True, key="prev_3"):
-            st.session_state["submit_step"] = 2
-            st.rerun()
-    with nav_r:
-        if st.button("次へ →", type="primary", use_container_width=True, key="next_3"):
-            if not product_name or not landing_url:
-                st.error("商材名とランディングページURLは必須です")
-            else:
-                data["product_name"] = product_name
-                data["landing_url"] = landing_url
-                data["description"] = description
-                data["brand_name"] = brand_name
-                data["industry"] = industry
-                st.session_state["submit_data"] = data
-                st.session_state["submit_step"] = 4
-                st.rerun()
-
-
-# ========================================
-# Step 4: デバイス
-# ========================================
-elif step == 4:
     st.markdown("##### デバイス")
     st.caption("広告を配信するデバイスを選択してください")
     st.write("")
@@ -305,20 +238,20 @@ elif step == 4:
     st.divider()
     nav_l, _, nav_r = st.columns([1, 6, 1])
     with nav_l:
-        if st.button("← 戻る", use_container_width=True, key="prev_4"):
-            st.session_state["submit_step"] = 3
+        if st.button("← 戻る", use_container_width=True, key="prev_3"):
+            st.session_state["submit_step"] = 2
             st.rerun()
     with nav_r:
-        if st.button("次へ →", type="primary", use_container_width=True, key="next_4",
+        if st.button("次へ →", type="primary", use_container_width=True, key="next_3",
                      disabled=(selected_count == 0)):
-            st.session_state["submit_step"] = 5
+            st.session_state["submit_step"] = 4
             st.rerun()
 
 
 # ========================================
-# Step 5: エリア
+# Step 4: エリア
 # ========================================
-elif step == 5:
+elif step == 4:
     st.markdown("##### エリア")
     st.caption("広告出稿対象のエリアを指定してください")
     st.write("")
@@ -402,19 +335,19 @@ elif step == 5:
     st.divider()
     nav_l, _, nav_r = st.columns([1, 6, 1])
     with nav_l:
-        if st.button("← 戻る", use_container_width=True, key="prev_5"):
-            st.session_state["submit_step"] = 4
+        if st.button("← 戻る", use_container_width=True, key="prev_4"):
+            st.session_state["submit_step"] = 3
             st.rerun()
     with nav_r:
-        if st.button("次へ →", type="primary", use_container_width=True, key="next_5"):
-            st.session_state["submit_step"] = 6
+        if st.button("次へ →", type="primary", use_container_width=True, key="next_4"):
+            st.session_state["submit_step"] = 5
             st.rerun()
 
 
 # ========================================
-# Step 6: ターゲット
+# Step 5: ターゲット
 # ========================================
-elif step == 6:
+elif step == 5:
     st.markdown("##### ターゲット設定")
     st.caption("広告を配信するユーザー属性を設定してください")
     st.write("")
@@ -473,19 +406,19 @@ elif step == 6:
     st.divider()
     nav_l, _, nav_r = st.columns([1, 6, 1])
     with nav_l:
-        if st.button("← 戻る", use_container_width=True, key="prev_6"):
-            st.session_state["submit_step"] = 5
+        if st.button("← 戻る", use_container_width=True, key="prev_5"):
+            st.session_state["submit_step"] = 4
             st.rerun()
     with nav_r:
-        if st.button("次へ →", type="primary", use_container_width=True, key="next_6"):
-            st.session_state["submit_step"] = 7
+        if st.button("次へ →", type="primary", use_container_width=True, key="next_5"):
+            st.session_state["submit_step"] = 6
             st.rerun()
 
 
 # ========================================
-# Step 7: 広告文作成
+# Step 6: 広告文作成
 # ========================================
-elif step == 7:
+elif step == 6:
     st.markdown("##### 広告文作成")
     st.caption("広告の見出しと説明文を入力してください")
     st.write("")
@@ -512,8 +445,16 @@ elif step == 7:
             placeholder="例）時間やコストを極力かけずに、高い成果を目指すならAdBoard。2ヶ月無料・Googleアナリティクス連携・事前の学習/経験不要",
             height=100,
         )
+        st.write("")
+        st.markdown("**遷移先URL**（広告クリック後のリンク先）")
+        landing_url = st.text_input(
+            "遷移先URL",
+            value=data.get("landing_url", ""),
+            placeholder="例）https://example.com/lp",
+            label_visibility="collapsed",
+        )
         display_url = st.text_input(
-            "表示URL",
+            "表示URL（広告上に表示される短縮URL）",
             value=data.get("display_url", ""),
             placeholder="例）example.com/adboard",
         )
@@ -545,28 +486,29 @@ elif step == 7:
     data["main_title"] = main_title
     data["sub_title"] = sub_title
     data["ad_description"] = ad_description
+    data["landing_url"] = landing_url
     data["display_url"] = display_url
     st.session_state["submit_data"] = data
 
     st.divider()
     nav_l, _, nav_r = st.columns([1, 6, 1])
     with nav_l:
-        if st.button("← 戻る", use_container_width=True, key="prev_7"):
-            st.session_state["submit_step"] = 6
+        if st.button("← 戻る", use_container_width=True, key="prev_6"):
+            st.session_state["submit_step"] = 5
             st.rerun()
     with nav_r:
-        if st.button("次へ →", type="primary", use_container_width=True, key="next_7"):
-            if not main_title or not ad_description:
-                st.error("メインタイトルと説明文は必須です")
+        if st.button("次へ →", type="primary", use_container_width=True, key="next_6"):
+            if not main_title or not ad_description or not landing_url:
+                st.error("メインタイトル・説明文・遷移先URLは必須です")
             else:
-                st.session_state["submit_step"] = 8
+                st.session_state["submit_step"] = 7
                 st.rerun()
 
 
 # ========================================
-# Step 8: 確認・送信
+# Step 7: 確認・送信
 # ========================================
-elif step == 8:
+elif step == 7:
     st.markdown("##### 入稿内容の確認")
     st.caption("以下の内容で広告を入稿します。内容に誤りがないかご確認ください")
     st.write("")
@@ -591,16 +533,9 @@ elif step == 8:
     with st.container(border=True):
         st.markdown("**連携媒体**")
         conns = data.get("connections", {})
-        connected = [k.upper() for k, v in conns.items() if v]
+        conn_names = {"google":"Google Ads","yahoo":"Yahoo!広告","meta":"Meta広告","tiktok":"TikTok広告"}
+        connected = [conn_names[k] for k, v in conns.items() if v]
         field("連携済み媒体", "、".join(connected) if connected else "—")
-
-    # 商材
-    with st.container(border=True):
-        st.markdown("**商材**")
-        field("商材名", data.get("product_name", "—"))
-        field("ランディングページ", data.get("landing_url", "—"))
-        field("ブランド名", data.get("brand_name", "—"))
-        field("業種", data.get("industry", "—"))
 
     # 配信設定
     with st.container(border=True):
@@ -632,6 +567,7 @@ elif step == 8:
         field("メインタイトル", data.get("main_title", "—"))
         field("サブタイトル", data.get("sub_title", "—"))
         field("説明文", data.get("ad_description", "—"))
+        field("遷移先URL", data.get("landing_url", "—"))
         field("表示URL", data.get("display_url", "—"))
 
     st.write("")
@@ -642,8 +578,8 @@ elif step == 8:
     st.divider()
     nav_l, _, nav_r = st.columns([1, 6, 1])
     with nav_l:
-        if st.button("← 戻る", use_container_width=True, key="prev_8"):
-            st.session_state["submit_step"] = 7
+        if st.button("← 戻る", use_container_width=True, key="prev_7"):
+            st.session_state["submit_step"] = 6
             st.rerun()
     with nav_r:
         if st.button("✨ 入稿する", type="primary", use_container_width=True,
@@ -661,3 +597,5 @@ elif step == 8:
             st.session_state["submit_data"] = {}
             st.session_state["submit_completed"] = False
             st.rerun()
+
+

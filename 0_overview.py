@@ -25,16 +25,27 @@ for _, row in df.iterrows():
         badges += '<span style="background:#e0f2fe;color:#0284c7;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;margin-left:6px;">Meta未計測</span>'
 
     with st.container(border=True):
-        c1, c2, c3, c4, c5, c6, c7 = st.columns([2, 2.5, 2, 1, 2, 1.5, 1])
+        c1, c2, c3, c4, c5, c6, c7 = st.columns([1.8, 2.2, 2, 1, 1.8, 1.5, 0.8])
         with c1:
             st.markdown(f"**{row['client']}**", unsafe_allow_html=True)
             if badges:
                 st.markdown(badges, unsafe_allow_html=True)
-        c2.metric("費用",      f"¥{row['cost']:,.0f}")
+        # 万円表示で見切れ防止
+        cost_val = row['cost']
+        if cost_val >= 10000:
+            c2.metric("費用", f"¥{cost_val/10000:,.1f}万")
+        else:
+            c2.metric("費用", f"¥{cost_val:,.0f}")
         c3.metric("IMP",       f"{row['imp']:,.0f}")
         c4.metric("CV",        f"{int(row['cv']):,}")
-        c5.metric("CPA",       f"¥{row['cpa']:,.0f}" if row['cpa'] else "—")
-        c6.metric("予算消化率", f"{row['pct_used']}%")
-        if c7.button("詳細 →", key=f"btn_{row['client']}"):
+        cpa_val = row['cpa']
+        if cpa_val and cpa_val >= 10000:
+            c5.metric("CPA", f"¥{cpa_val/10000:,.1f}万")
+        elif cpa_val:
+            c5.metric("CPA", f"¥{cpa_val:,.0f}")
+        else:
+            c5.metric("CPA", "—")
+        c6.metric("消化率", f"{row['pct_used']}%")
+        if c7.button("詳細", key=f"btn_{row['client']}"):
             st.session_state["client"] = row["client"]
             st.rerun()

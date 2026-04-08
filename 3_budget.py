@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from loader import get_budget_progress, TODAY
 
-client = st.session_state.get("client", "船井自動車販売")
+client = st.session_state.get("client", "船井総研")
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
 COLORS = {"google":"#5b6cf6","yahoo":"#7c3aed","meta":"#06b6d4","tiktok":"#a78bfa"}
 

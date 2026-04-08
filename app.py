@@ -4,12 +4,12 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent))
 from loader import get_clients, ALL_CLIENTS, DEFAULT_SELECTED
 
-st.set_page_config(page_title="AdBoard", page_icon="📊", layout="wide")
+st.set_page_config(page_title="AdBoard", layout="wide")
 
 # ─── グローバルCSS ───
 st.markdown("""
 <style>
-/* ===== フォント・ベース ===== */
+/* ===== フォント ===== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
 html, body, [class*="css"] {
     font-family: 'Inter', 'Noto Sans JP', sans-serif;
@@ -20,179 +20,200 @@ header[data-testid="stHeader"] {
     display: none !important;
 }
 
-/* ===== ページ余白調整 ===== */
+/* ===== ページ余白 ===== */
 .block-container {
-    padding-top: 1.5rem !important;
+    padding-top: 1.2rem !important;
     padding-bottom: 1rem !important;
+    max-width: 1200px;
 }
 
 /* ===== ヘッダー ===== */
-.adboard-title {
-    font-size: 26px;
-    font-weight: 700;
-    color: #4338ca;
-    margin: 0;
-    letter-spacing: 0.3px;
+.adboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0 14px 0;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(90deg, #a78bfa, #6366f1, #38bdf8) 1;
+    margin-bottom: 8px;
 }
-.adboard-subtitle {
-    color: #6b7280;
-    font-size: 14px;
-    margin: 2px 0 8px 0;
+.adboard-logo {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+}
+.adboard-sub {
+    color: #9ca3af;
+    font-size: 12px;
+    margin-left: 14px;
+    font-weight: 500;
 }
 
 /* ===== タブスタイル ===== */
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background: linear-gradient(90deg, #f0edff 0%, #e8ecff 50%, #edf4ff 100%);
-    border-radius: 12px;
-    padding: 5px 6px;
-    gap: 4px;
-    border: 1px solid rgba(124,107,246,0.1);
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    gap: 0;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
 }
 [data-testid="stTabs"] [data-baseweb="tab"] {
-    border-radius: 9px;
-    font-weight: 600;
-    font-size: 13px;
-    padding: 8px 20px;
-    color: #5b5e8a;
+    border-radius: 0;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px 22px;
+    color: #9ca3af;
+    border-bottom: 2px solid transparent;
     transition: all 0.2s ease;
+    background: transparent !important;
 }
 [data-testid="stTabs"] [aria-selected="true"] {
-    background: linear-gradient(135deg, #7c6bf6, #6366f1) !important;
-    color: #ffffff !important;
-    box-shadow: 0 2px 8px rgba(99,102,241,0.25);
+    color: #6366f1 !important;
+    font-weight: 600;
+    border-bottom: 2px solid #6366f1 !important;
+    background: transparent !important;
+    box-shadow: none;
 }
 [data-testid="stTabs"] [data-baseweb="tab"]:hover {
-    background: rgba(124,107,246,0.08);
+    color: #6366f1;
+    background: transparent !important;
+}
+/* タブ下の余計な線を非表示 */
+[data-testid="stTabs"] [role="tabpanel"] {
+    padding-top: 16px;
 }
 
 /* ===== メトリックカード ===== */
 [data-testid="stMetric"] {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f7ff 100%);
-    border: 1px solid rgba(124,107,246,0.12);
-    border-radius: 12px;
-    padding: 14px 16px;
-    box-shadow: 0 2px 8px rgba(124,107,246,0.06);
-    transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 8px 4px;
+    box-shadow: none;
 }
 [data-testid="stMetric"]:hover {
-    box-shadow: 0 4px 16px rgba(124,107,246,0.12);
-    border-color: rgba(124,107,246,0.25);
-    transform: translateY(-1px);
+    box-shadow: none;
+    border-color: transparent;
+    transform: none;
 }
 [data-testid="stMetricLabel"] {
-    color: #7c7ea8 !important;
-    font-size: 12px !important;
+    color: #9ca3af !important;
+    font-size: 11px !important;
     font-weight: 600 !important;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
 }
 [data-testid="stMetricValue"] {
-    color: #1a1b3e !important;
+    color: #1e1b4b !important;
     font-weight: 700 !important;
+    font-size: 22px !important;
 }
 [data-testid="stMetricDelta"] {
-    font-weight: 600 !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
 }
 
 /* ===== コンテナ（カード） ===== */
-[data-testid="stExpander"],
-div[data-testid="stVerticalBlockBorderWrapper"]:has(> div > div[data-testid="stVerticalBlock"] > div.stMarkdown) {
-    border-radius: 12px !important;
-}
 div[data-testid="stVerticalBlockBorderWrapper"] > div {
-    border-color: rgba(124,107,246,0.12) !important;
-    border-radius: 12px !important;
+    border-color: #e5e7eb !important;
+    border-radius: 10px !important;
 }
-
-/* ===== st.container(border=True) のスタイル ===== */
 [data-testid="stVerticalBlockBorderWrapper"] {
-    border-radius: 12px !important;
+    border-radius: 10px !important;
     overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+[data-testid="stVerticalBlockBorderWrapper"]:hover {
+    box-shadow: 0 2px 12px rgba(99,102,241,0.08);
 }
 
 /* ===== プログレスバー ===== */
 [data-testid="stProgress"] > div > div {
-    background: linear-gradient(90deg, #a78bfa, #7c6bf6, #60a5fa) !important;
-    border-radius: 8px !important;
-}
-[data-testid="stProgress"] {
-    border-radius: 8px;
+    background: linear-gradient(90deg, #a78bfa, #6366f1, #38bdf8) !important;
+    border-radius: 6px !important;
 }
 
 /* ===== セレクトボックス ===== */
-[data-baseweb="select"] {
-    border-radius: 10px !important;
-}
 [data-baseweb="select"] > div {
-    border-color: rgba(124,107,246,0.2) !important;
-    border-radius: 10px !important;
+    border-color: #e5e7eb !important;
+    border-radius: 8px !important;
     background: #ffffff;
+    font-size: 14px;
 }
 [data-baseweb="select"] > div:hover {
-    border-color: rgba(124,107,246,0.4) !important;
+    border-color: #a5b4fc !important;
 }
 
 /* ===== ボタン ===== */
 .stButton > button {
-    border-radius: 10px;
+    border-radius: 8px;
     font-weight: 600;
-    border: 1px solid rgba(124,107,246,0.2);
+    font-size: 13px;
+    border: 1px solid #e5e7eb;
+    color: #6366f1;
     transition: all 0.2s ease;
 }
 .stButton > button:hover {
-    border-color: #7c6bf6;
-    box-shadow: 0 2px 8px rgba(124,107,246,0.15);
+    border-color: #a5b4fc;
+    background: #f5f3ff;
 }
 .stButton > button[kind="primary"],
 .stButton > button[data-testid="baseButton-primary"] {
-    background: linear-gradient(135deg, #7c6bf6, #6366f1) !important;
+    background: #6366f1 !important;
     color: white !important;
     border: none !important;
+}
+.stButton > button[kind="primary"]:hover,
+.stButton > button[data-testid="baseButton-primary"]:hover {
+    background: #4f46e5 !important;
 }
 
 /* ===== ダウンロードボタン ===== */
 .stDownloadButton > button {
-    border-radius: 10px;
+    border-radius: 8px;
     font-weight: 600;
-    background: linear-gradient(135deg, #f0edff, #edf0ff) !important;
-    border: 1px solid rgba(124,107,246,0.15) !important;
-    color: #5b4dc7 !important;
+    background: #f5f3ff !important;
+    border: 1px solid #e0e7ff !important;
+    color: #4f46e5 !important;
 }
 .stDownloadButton > button:hover {
-    background: linear-gradient(135deg, #e8e3ff, #e3e8ff) !important;
-    box-shadow: 0 2px 8px rgba(124,107,246,0.15);
+    background: #ede9fe !important;
 }
 
 /* ===== データフレーム ===== */
 [data-testid="stDataFrame"] {
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    border: 1px solid rgba(124,107,246,0.1);
+    border: 1px solid #e5e7eb;
 }
 
-/* ===== 情報・警告ボックス ===== */
+/* ===== アラートボックス ===== */
 [data-testid="stAlert"] {
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 /* ===== Divider ===== */
 hr {
-    border-color: rgba(124,107,246,0.1) !important;
+    border-color: #f3f4f6 !important;
 }
 
 /* ===== マルチセレクト ===== */
 [data-baseweb="tag"] {
-    background: linear-gradient(135deg, #7c6bf6, #6366f1) !important;
-    border-radius: 8px !important;
+    background: #6366f1 !important;
+    border-radius: 6px !important;
 }
 
 /* ===== Expander ===== */
 [data-testid="stExpander"] {
-    border: 1px solid rgba(124,107,246,0.12) !important;
-    border-radius: 12px !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 10px !important;
 }
 
-/* ===== サイドバー非表示（全ページタブ方式のため） ===== */
+/* ===== サイドバー非表示 ===== */
 [data-testid="stSidebar"] {
     display: none;
 }
@@ -208,12 +229,16 @@ if "client" not in st.session_state:
 if "period" not in st.session_state:
     st.session_state["period"] = "今月（4月）"
 
-# ─── ヘッダー + 会社選択（同じ行） ───
+# ─── ヘッダー ───
 col_title, col_client = st.columns([8, 2])
 with col_title:
     st.markdown("""
-    <p class="adboard-title">AdBoard</p>
-    <p class="adboard-subtitle">広告統合管理ダッシュボード</p>
+    <div class="adboard-header">
+        <div style="display:flex;align-items:baseline;">
+            <span class="adboard-logo">AdBoard</span>
+            <span class="adboard-sub">広告統合管理ダッシュボード</span>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
 with col_client:
     selected_client = st.selectbox(

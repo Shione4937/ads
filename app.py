@@ -6,26 +6,200 @@ from loader import get_clients, ALL_CLIENTS, DEFAULT_SELECTED
 
 st.set_page_config(page_title="AdBoard", page_icon="📊", layout="wide")
 
+# ─── グローバルCSS ───
 st.markdown("""
 <style>
-[data-testid="stMetric"] {
-    border: 0.5px solid rgba(124,58,237,0.15);
-    border-radius: 10px;
-    padding: 8px 12px;
+/* ===== フォント・ベース ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
+html, body, [class*="css"] {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
 }
+
+/* ===== ページ余白調整 ===== */
+.block-container {
+    padding-top: 0.5rem !important;
+    padding-bottom: 1rem !important;
+}
+
+/* ===== ヘッダーバナー ===== */
+.adboard-header {
+    background: linear-gradient(135deg, #a78bfa 0%, #7c6bf6 35%, #6366f1 65%, #60a5fa 100%);
+    border-radius: 14px;
+    padding: 18px 28px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(124,107,246,0.18);
+}
+.adboard-header h1 {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+.adboard-header p {
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    margin: 2px 0 0 0;
+}
+
+/* ===== タブスタイル ===== */
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
-    border-radius: 10px;
-    padding: 4px;
-    gap: 2px;
+    background: linear-gradient(90deg, #f0edff 0%, #e8ecff 50%, #edf4ff 100%);
+    border-radius: 12px;
+    padding: 5px 6px;
+    gap: 4px;
+    border: 1px solid rgba(124,107,246,0.1);
 }
 [data-testid="stTabs"] [data-baseweb="tab"] {
-    border-radius: 7px;
+    border-radius: 9px;
     font-weight: 600;
     font-size: 13px;
-    padding: 6px 18px;
+    padding: 8px 20px;
+    color: #5b5e8a;
+    transition: all 0.2s ease;
 }
-.block-container {
-    padding-top: 1rem !important;
+[data-testid="stTabs"] [aria-selected="true"] {
+    background: linear-gradient(135deg, #7c6bf6, #6366f1) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.25);
+}
+[data-testid="stTabs"] [data-baseweb="tab"]:hover {
+    background: rgba(124,107,246,0.08);
+}
+
+/* ===== メトリックカード ===== */
+[data-testid="stMetric"] {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f7ff 100%);
+    border: 1px solid rgba(124,107,246,0.12);
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 8px rgba(124,107,246,0.06);
+    transition: all 0.2s ease;
+}
+[data-testid="stMetric"]:hover {
+    box-shadow: 0 4px 16px rgba(124,107,246,0.12);
+    border-color: rgba(124,107,246,0.25);
+    transform: translateY(-1px);
+}
+[data-testid="stMetricLabel"] {
+    color: #7c7ea8 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+[data-testid="stMetricValue"] {
+    color: #1a1b3e !important;
+    font-weight: 700 !important;
+}
+[data-testid="stMetricDelta"] {
+    font-weight: 600 !important;
+}
+
+/* ===== コンテナ（カード） ===== */
+[data-testid="stExpander"],
+div[data-testid="stVerticalBlockBorderWrapper"]:has(> div > div[data-testid="stVerticalBlock"] > div.stMarkdown) {
+    border-radius: 12px !important;
+}
+div[data-testid="stVerticalBlockBorderWrapper"] > div {
+    border-color: rgba(124,107,246,0.12) !important;
+    border-radius: 12px !important;
+}
+
+/* ===== st.container(border=True) のスタイル ===== */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+/* ===== プログレスバー ===== */
+[data-testid="stProgress"] > div > div {
+    background: linear-gradient(90deg, #a78bfa, #7c6bf6, #60a5fa) !important;
+    border-radius: 8px !important;
+}
+[data-testid="stProgress"] {
+    border-radius: 8px;
+}
+
+/* ===== セレクトボックス ===== */
+[data-baseweb="select"] {
+    border-radius: 10px !important;
+}
+[data-baseweb="select"] > div {
+    border-color: rgba(124,107,246,0.2) !important;
+    border-radius: 10px !important;
+    background: #ffffff;
+}
+[data-baseweb="select"] > div:hover {
+    border-color: rgba(124,107,246,0.4) !important;
+}
+
+/* ===== ボタン ===== */
+.stButton > button {
+    border-radius: 10px;
+    font-weight: 600;
+    border: 1px solid rgba(124,107,246,0.2);
+    transition: all 0.2s ease;
+}
+.stButton > button:hover {
+    border-color: #7c6bf6;
+    box-shadow: 0 2px 8px rgba(124,107,246,0.15);
+}
+.stButton > button[kind="primary"],
+.stButton > button[data-testid="baseButton-primary"] {
+    background: linear-gradient(135deg, #7c6bf6, #6366f1) !important;
+    color: white !important;
+    border: none !important;
+}
+
+/* ===== ダウンロードボタン ===== */
+.stDownloadButton > button {
+    border-radius: 10px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #f0edff, #edf0ff) !important;
+    border: 1px solid rgba(124,107,246,0.15) !important;
+    color: #5b4dc7 !important;
+}
+.stDownloadButton > button:hover {
+    background: linear-gradient(135deg, #e8e3ff, #e3e8ff) !important;
+    box-shadow: 0 2px 8px rgba(124,107,246,0.15);
+}
+
+/* ===== データフレーム ===== */
+[data-testid="stDataFrame"] {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(124,107,246,0.1);
+}
+
+/* ===== 情報・警告ボックス ===== */
+[data-testid="stAlert"] {
+    border-radius: 10px;
+}
+
+/* ===== Divider ===== */
+hr {
+    border-color: rgba(124,107,246,0.1) !important;
+}
+
+/* ===== マルチセレクト ===== */
+[data-baseweb="tag"] {
+    background: linear-gradient(135deg, #7c6bf6, #6366f1) !important;
+    border-radius: 8px !important;
+}
+
+/* ===== Expander ===== */
+[data-testid="stExpander"] {
+    border: 1px solid rgba(124,107,246,0.12) !important;
+    border-radius: 12px !important;
+}
+
+/* ===== サイドバー非表示（全ページタブ方式のため） ===== */
+[data-testid="stSidebar"] {
+    display: none;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -39,21 +213,29 @@ if "client" not in st.session_state:
 if "period" not in st.session_state:
     st.session_state["period"] = "今月（4月）"
 
-# ヘッダー：コンパクトに
-header_l, header_r = st.columns([5, 1])
-with header_l:
-    st.markdown("**AdBoard** — 広告統合管理")
-with header_r:
+# ─── ヘッダー ───
+st.markdown("""
+<div class="adboard-header">
+    <div>
+        <h1>📊 AdBoard</h1>
+        <p>広告統合ダッシュボード — Google / Yahoo / Meta / TikTok</p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# 会社選択（ヘッダー下）
+_, col_client = st.columns([7, 2])
+with col_client:
     selected_client = st.selectbox(
-        "", get_clients(),
+        "クライアント選択", get_clients(),
         index=get_clients().index(st.session_state["client"]),
         label_visibility="collapsed"
     )
     st.session_state["client"] = selected_client
 
-# タブナビ
+# ─── タブナビ ───
 tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "全社一覧", "サマリー", "媒体別詳細", "予算管理", "レポート", "設定",
+    "📋 全社一覧", "📊 サマリー", "📈 媒体別詳細", "💰 予算管理", "📄 レポート", "⚙️ 設定",
 ])
 
 PERIOD_MAP = {

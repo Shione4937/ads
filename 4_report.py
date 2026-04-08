@@ -5,10 +5,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from loader import load_demo, get_summary
 
-client = st.session_state.get("client", "東信自動車")
+client = st.session_state.get("client", "A社")
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
 
-st.title(f"レポート — {client}")
+st.markdown(f"#### 📄 レポート — {client}")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -25,18 +25,28 @@ df_b = load_demo(client=client, date_from=str(d_from_b), date_to=str(d_to_b))
 sum_a = get_summary(df_a)
 sum_b = get_summary(df_b)
 
-with st.container(border=True):
-    st.markdown("🤖 **AI期間比較コメント** `Gemini連携予定`")
-    cost_a = int(df_a["cost"].sum()); cost_b = int(df_b["cost"].sum())
-    cv_a = int(df_a["cv"].sum()); cv_b = int(df_b["cv"].sum())
-    st.info(
-        f"期間A（{d_from_a}〜{d_to_a}）vs 期間B（{d_from_b}〜{d_to_b}）の比較：\n\n"
-        f"費用：¥{cost_a:,.0f} → ¥{cost_b:,.0f}、"
-        f"CV：{cv_a:,}件 → {cv_b:,}件。"
-        "詳細な改善提案はGemini API連携後に自動生成されます。"
-    )
+# AI期間比較コメント
+cost_a = int(df_a["cost"].sum()); cost_b = int(df_b["cost"].sum())
+cv_a = int(df_a["cv"].sum()); cv_b = int(df_b["cv"].sum())
 
-st.subheader("期間比較テーブル")
+st.markdown(f"""
+<div style="background:linear-gradient(135deg, #f5f3ff 0%, #eef2ff 50%, #f0f9ff 100%);
+            border:1px solid rgba(124,107,246,0.15);border-radius:12px;padding:18px 22px;margin:16px 0;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:18px;">🤖</span>
+        <span style="font-weight:700;color:#4338ca;">AI期間比較コメント</span>
+        <span style="background:linear-gradient(135deg,#7c6bf6,#60a5fa);color:#fff;font-size:10px;
+                     padding:2px 8px;border-radius:6px;font-weight:600;">Gemini連携予定</span>
+    </div>
+    <p style="color:#374151;font-size:14px;line-height:1.7;margin:0;">
+        期間A（{d_from_a}〜{d_to_a}）vs 期間B（{d_from_b}〜{d_to_b}）の比較：
+        費用 ¥{cost_a:,.0f} → ¥{cost_b:,.0f}、CV {cv_a:,}件 → {cv_b:,}件。
+        詳細な改善提案はGemini API連携後に自動生成されます。
+    </p>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("**期間比較テーブル**")
 merged = sum_a[["platform","cost","imp","click","cv","cpa"]].merge(
     sum_b[["platform","cost","imp","click","cv","cpa"]], on="platform", suffixes=("_A","_B"))
 merged["費用変化"] = ((merged["cost_B"]-merged["cost_A"])/merged["cost_A"].replace(0,1)*100).round(1)
@@ -48,7 +58,9 @@ disp["費用B"] = disp["費用B"].apply(lambda x: f"¥{x:,.0f}")
 disp["費用変化%"] = disp["費用変化%"].apply(lambda x: f"{x:+.1f}%")
 st.dataframe(disp, use_container_width=True, hide_index=True)
 
-st.subheader("CSVエクスポート")
+st.divider()
+
+st.markdown("**CSVエクスポート**")
 c1, c2 = st.columns(2)
 with c1:
     all_df = load_demo(client=client)

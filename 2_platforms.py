@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from loader import load_demo
 
-client = st.session_state.get("client", "東信自動車")
+client = st.session_state.get("client", "A社")
 period = st.session_state.get("period", "今月（4月）")
 PERIOD_MAP = {
     "今月（4月）":   ("2026-04-01","2026-04-14"),
@@ -15,36 +15,58 @@ PERIOD_MAP = {
     "直近12ヶ月":   ("2025-04-14","2026-04-14"),
 }
 d_from, d_to = PERIOD_MAP.get(period, ("2026-04-01","2026-04-14"))
-COLORS = {"google":"#5b6cf6","yahoo":"#7c3aed","meta":"#06b6d4","tiktok":"#a78bfa"}
-PNAMES = {"google":"Google Ads","yahoo":"Yahoo!広告","meta":"Meta広告","tiktok":"TikTok広告"}
 
-st.title(f"媒体別詳細 — {client}")
+# カラーパレット（紫〜ブルー系）
+COLORS = {"google":"#6366f1","yahoo":"#8b5cf6","meta":"#38bdf8","tiktok":"#a78bfa"}
+PNAMES = {"google":"Google Ads","yahoo":"Yahoo!広告","meta":"Meta広告","tiktok":"TikTok広告"}
+TAB_ICONS = {"google":"🔵","yahoo":"🟣","meta":"💎","tiktok":"🔮"}
+
+st.markdown(f"#### 📈 媒体別詳細 — {client}")
 st.caption(f"{d_from} 〜 {d_to}")
 
 df = load_demo(client=client, date_from=d_from, date_to=d_to)
-tabs = st.tabs(["🔵 Google","🟣 Yahoo","🔷 Meta","⚫ TikTok"])
+tabs = st.tabs([f"{TAB_ICONS[p]} {PNAMES[p]}" for p in ["google","yahoo","meta","tiktok"]])
 
 for tab, platform in zip(tabs, ["google","yahoo","meta","tiktok"]):
     with tab:
         pf = df[df["platform"]==platform]
         c1,c2,c3,c4 = st.columns(4)
-        c1.metric("費用",   f"¥{int(pf['cost'].sum()):,.0f}")
-        c2.metric("IMP",    f"{int(pf['imp'].sum()):,.0f}")
-        c3.metric("クリック",f"{int(pf['click'].sum()):,.0f}")
-        c4.metric("CV",     f"{int(pf['cv'].sum()):,.0f}" if platform!="meta" else "未計測")
+        c1.metric("費用",    f"¥{int(pf['cost'].sum()):,.0f}")
+        c2.metric("IMP",     f"{int(pf['imp'].sum()):,.0f}")
+        c3.metric("クリック", f"{int(pf['click'].sum()):,.0f}")
+        c4.metric("CV",      f"{int(pf['cv'].sum()):,.0f}" if platform!="meta" else "未計測")
+
         if platform=="meta":
-            st.info("MetaはCSVエクスポートにCV列が含まれません。API連携後に取得可能になります。")
+            st.markdown("""
+            <div style="background:linear-gradient(135deg,#f0f9ff,#eef2ff);border:1px solid rgba(56,189,248,0.2);
+                        border-radius:10px;padding:12px 16px;margin:8px 0;">
+                <span style="color:#0284c7;font-weight:600;">ℹ️ MetaはCSVエクスポートにCV列が含まれません。API連携後に取得可能になります。</span>
+            </div>
+            """, unsafe_allow_html=True)
+
         camp = pf.groupby("campaign").agg(cost=("cost","sum"),imp=("imp","sum"),
                click=("click","sum"),cv=("cv","sum")).reset_index()
         camp = camp[camp["cost"]>0].sort_values("cost",ascending=False)
         camp["cpa"] = (camp["cost"]/camp["cv"].replace(0,float("nan"))).round(0)
+
         fig = px.bar(camp.sort_values("cost",ascending=True), x="cost", y="campaign",
                      orientation="h", color_discrete_sequence=[COLORS[platform]],
                      labels={"cost":"費用（円）","campaign":""})
-        fig.update_traces(texttemplate="¥%{x:,.0f}", textposition="outside")
-        fig.update_layout(height=max(200, len(camp)*50+60), margin=dict(t=10,b=10), showlegend=False)
+        fig.update_traces(texttemplate="¥%{x:,.0f}", textposition="outside",
+                          marker_line_width=0, opacity=0.9)
+        fig.update_layout(
+            height=max(200, len(camp)*50+60),
+            margin=dict(t=10,b=10,l=10,r=10),
+            showlegend=False,
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            xaxis=dict(gridcolor="rgba(124,107,246,0.06)"),
+            yaxis=dict(gridcolor="rgba(124,107,246,0.06)"),
+        )
         st.plotly_chart(fig, use_container_width=True)
-        camp["cost"] = camp["cost"].apply(lambda x: f"¥{x:,.0f}")
-        camp["cpa"]  = camp["cpa"].apply(lambda x: f"¥{x:,.0f}" if str(x)!="nan" else "—")
-        camp.columns = ["キャンペーン","費用","IMP","クリック","CV","CPA"]
-        st.dataframe(camp, use_container_width=True, hide_index=True)
+
+        camp_disp = camp.copy()
+        camp_disp["cost"] = camp_disp["cost"].apply(lambda x: f"¥{x:,.0f}")
+        camp_disp["cpa"]  = camp_disp["cpa"].apply(lambda x: f"¥{x:,.0f}" if str(x)!="nan" else "—")
+        camp_disp.columns = ["キャンペーン","費用","IMP","クリック","CV","CPA"]
+        st.dataframe(camp_disp, use_container_width=True, hide_index=True)

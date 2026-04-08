@@ -8,46 +8,30 @@ st.set_page_config(page_title="AdBoard", page_icon="📊", layout="wide")
 
 st.markdown("""
 <style>
-html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
-    background-color: #f5f6fa !important;
-    color: #1a1d2e !important;
-}
-[data-testid="stSidebar"] { background-color: #ffffff !important; }
-[data-testid="stSidebar"] * { color: #1a1d2e !important; }
-[data-testid="stSidebarNavItems"] { display: none !important; }
 [data-testid="stMetric"] {
-    background: #ffffff;
-    border: 0.5px solid #e8eaf0;
+    border: 0.5px solid rgba(124,58,237,0.15);
     border-radius: 10px;
     padding: 8px 12px;
 }
-[data-testid="stMetricValue"] { font-size: 1.4rem !important; font-weight: 700 !important; color: #1a1d2e !important; }
-[data-testid="stMetricLabel"] { color: #6b7280 !important; }
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background: #ffffff;
     border-radius: 10px;
     padding: 4px;
-    border: 0.5px solid #e8eaf0;
     gap: 2px;
-    margin-bottom: 4px;
 }
 [data-testid="stTabs"] [data-baseweb="tab"] {
     border-radius: 7px;
     font-weight: 600;
     font-size: 13px;
     padding: 6px 18px;
-    color: #6b7280 !important;
 }
-[data-testid="stTabs"] [aria-selected="true"] {
-    background: #5b6cf6 !important;
-    color: #ffffff !important;
+.block-container {
+    padding-top: 1rem !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
 ROOT = Path(__file__).parent
 
-# session_state 初期化
 if "selected_clients" not in st.session_state:
     st.session_state["selected_clients"] = DEFAULT_SELECTED
 if "client" not in st.session_state:
@@ -55,30 +39,23 @@ if "client" not in st.session_state:
 if "period" not in st.session_state:
     st.session_state["period"] = "今月（4月）"
 
-# ヘッダー：右上に会社ドロップダウン
-header_l, header_r = st.columns([4, 1])
+# ヘッダー：コンパクトに
+header_l, header_r = st.columns([5, 1])
 with header_l:
-    st.markdown("### AdBoard")
+    st.markdown("**AdBoard** — 広告統合管理")
 with header_r:
     selected_client = st.selectbox(
-        "", get_clients(), index=get_clients().index(st.session_state["client"]),
+        "", get_clients(),
+        index=get_clients().index(st.session_state["client"]),
         label_visibility="collapsed"
     )
     st.session_state["client"] = selected_client
 
-st.divider()
-
 # タブナビ
 tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "全社一覧",
-    "サマリー",
-    "媒体別詳細",
-    "予算管理",
-    "レポート",
-    "設定",
+    "全社一覧", "サマリー", "媒体別詳細", "予算管理", "レポート", "設定",
 ])
 
-# 期間選択（全社一覧以外で使用）
 PERIOD_MAP = {
     "今月（4月）":   ("2026-04-01","2026-04-14"),
     "先月（3月）":   ("2026-03-01","2026-03-31"),

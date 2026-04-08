@@ -4,7 +4,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from loader import ALL_CLIENTS, DEFAULT_SELECTED
 
-st.markdown("#### ⚙️ 設定")
+st.markdown("#### 設定")
 
 # 表示企業の選択
 st.markdown("**表示企業の選択**")
@@ -18,7 +18,7 @@ selected = st.multiselect(
     default=current,
 )
 
-if st.button("💾 保存", type="primary"):
+if st.button("保存", type="primary"):
     if len(selected) == 0:
         st.error("1社以上選択してください")
     else:

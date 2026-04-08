@@ -17,7 +17,7 @@ html, body, [class*="css"] {
 
 /* ===== ページ余白調整 ===== */
 .block-container {
-    padding-top: 0.5rem !important;
+    padding-top: 2rem !important;
     padding-bottom: 1rem !important;
 }
 
@@ -221,7 +221,7 @@ with col_client:
 
 # ─── タブナビ ───
 tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "📋 全社一覧", "📊 サマリー", "📈 媒体別詳細", "💰 予算管理", "📄 レポート", "⚙️ 設定",
+    "全社一覧", "サマリー", "媒体別詳細", "予算管理", "レポート", "設定",
 ])
 
 PERIOD_MAP = {

@@ -19,13 +19,11 @@ d_from, d_to = PERIOD_MAP.get(period, ("2026-04-01","2026-04-14"))
 # カラーパレット（紫〜ブルー系）
 COLORS = {"google":"#6366f1","yahoo":"#8b5cf6","meta":"#38bdf8","tiktok":"#a78bfa"}
 PNAMES = {"google":"Google Ads","yahoo":"Yahoo!広告","meta":"Meta広告","tiktok":"TikTok広告"}
-TAB_ICONS = {"google":"🔵","yahoo":"🟣","meta":"💎","tiktok":"🔮"}
-
-st.markdown(f"#### 📈 媒体別詳細 — {client}")
+st.markdown(f"#### 媒体別詳細 — {client}")
 st.caption(f"{d_from} 〜 {d_to}")
 
 df = load_demo(client=client, date_from=d_from, date_to=d_to)
-tabs = st.tabs([f"{TAB_ICONS[p]} {PNAMES[p]}" for p in ["google","yahoo","meta","tiktok"]])
+tabs = st.tabs([PNAMES[p] for p in ["google","yahoo","meta","tiktok"]])
 
 for tab, platform in zip(tabs, ["google","yahoo","meta","tiktok"]):
     with tab:

@@ -9,7 +9,7 @@ client = st.session_state.get("client", "A社")
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
 COLORS = {"google":"#6366f1","yahoo":"#8b5cf6","meta":"#38bdf8","tiktok":"#a78bfa"}
 
-st.markdown(f"#### 💰 予算管理 — {client}")
+st.markdown(f"#### 予算管理 — {client}")
 st.caption(f"基準日：{TODAY}（4月14日）")
 
 bp = get_budget_progress(client)

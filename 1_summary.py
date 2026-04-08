@@ -27,7 +27,7 @@ summary = get_summary(df)
 COLORS = {"google":"#6366f1","yahoo":"#8b5cf6","meta":"#38bdf8","tiktok":"#a78bfa"}
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
 
-st.markdown(f"#### 📊 サマリー — {client}")
+st.markdown(f"#### サマリー — {client}")
 st.caption(f"{d_from} 〜 {d_to}")
 
 total_cost = int(df["cost"].sum())

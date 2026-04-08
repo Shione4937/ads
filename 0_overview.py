@@ -7,7 +7,7 @@ from loader import get_all_clients_summary, ALL_CLIENTS
 
 selected = st.session_state.get("selected_clients", ALL_CLIENTS[:5])
 
-st.markdown("#### 📋 全社一覧")
+st.markdown("#### 全社一覧")
 st.caption("2026-04-01 〜 2026-04-14　｜　設定タブで表示企業を選択できます")
 
 df = get_all_clients_summary(selected, "2026-04-01", "2026-04-14")

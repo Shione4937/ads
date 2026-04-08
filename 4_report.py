@@ -8,7 +8,7 @@ from loader import load_demo, get_summary
 client = st.session_state.get("client", "A社")
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
 
-st.markdown(f"#### 📄 レポート — {client}")
+st.markdown(f"#### レポート — {client}")
 
 col1, col2 = st.columns(2)
 with col1:

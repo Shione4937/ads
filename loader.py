@@ -5,6 +5,8 @@ from datetime import date
 
 DATA_DIR = os.path.dirname(__file__)
 TODAY = date(2026, 4, 14)
+ALL_CLIENTS = ["A社","B社","C社","D社","E社","F社","G社","H社"]
+DEFAULT_SELECTED = ["A社","B社","C社","D社","E社"]
 
 
 def load_demo(client=None, date_from=None, date_to=None):
@@ -12,7 +14,10 @@ def load_demo(client=None, date_from=None, date_to=None):
     df = pd.read_csv(path, parse_dates=["date"])
     df["date"] = pd.to_datetime(df["date"]).dt.date
     if client:
-        df = df[df["client"] == client]
+        if isinstance(client, list):
+            df = df[df["client"].isin(client)]
+        else:
+            df = df[df["client"] == client]
     if date_from:
         df = df[df["date"] >= pd.to_datetime(date_from).date()]
     if date_to:
@@ -21,9 +26,7 @@ def load_demo(client=None, date_from=None, date_to=None):
 
 
 def get_clients():
-    path = os.path.join(DATA_DIR, "demo_data.csv")
-    df = pd.read_csv(path, usecols=["client"])
-    return sorted(df["client"].unique().tolist())
+    return ALL_CLIENTS
 
 
 def get_summary(df):
@@ -42,6 +45,41 @@ def get_summary(df):
     return summary
 
 
+def get_all_clients_summary(clients, date_from, date_to):
+    df = load_demo(client=clients, date_from=date_from, date_to=date_to)
+    rows = []
+    for client in clients:
+        cdf = df[df["client"] == client]
+        cost = cdf["cost"].sum()
+        imp  = cdf["imp"].sum()
+        click= cdf["click"].sum()
+        cv   = cdf[cdf["platform"] != "meta"]["cv"].sum()
+        budget = cdf["budget_monthly"].iloc[0] if len(cdf) > 0 else 0
+        target_cpa = cdf["target_cpa"].iloc[0] if len(cdf) > 0 else 0
+        cpa  = round(cost / cv) if cv > 0 else None
+        pct  = round(cost / budget * 100, 1) if budget > 0 else 0
+
+        # アラート判定
+        alerts = []
+        if pct >= 90: alerts.append("予算90%超")
+        if cpa and target_cpa and cpa > target_cpa * 1.5: alerts.append("CPA超過")
+        if cdf[cdf["platform"]=="meta"]["cost"].sum() > 0: alerts.append("Meta未計測")
+
+        rows.append({
+            "client": client,
+            "cost": round(cost),
+            "imp": round(imp),
+            "click": round(click),
+            "cv": round(cv),
+            "cpa": cpa,
+            "budget": budget,
+            "pct_used": pct,
+            "target_cpa": target_cpa,
+            "alerts": alerts,
+        })
+    return pd.DataFrame(rows)
+
+
 def get_budget_progress(client):
     month_start = date(TODAY.year, TODAY.month, 1)
     df = load_demo(client=client, date_from=str(month_start), date_to=str(TODAY))
@@ -50,7 +88,7 @@ def get_budget_progress(client):
     days_remaining = days_in_month - days_elapsed
 
     rows = []
-    for platform in ["google", "yahoo", "meta", "tiktok"]:
+    for platform in ["google","yahoo","meta","tiktok"]:
         pf = df[df["platform"] == platform]
         cost_used = pf["cost"].sum()
         budget = pf["budget_monthly"].iloc[0] if len(pf) > 0 else 0

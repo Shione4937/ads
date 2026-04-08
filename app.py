@@ -203,14 +203,13 @@ if "client" not in st.session_state:
 if "period" not in st.session_state:
     st.session_state["period"] = "今月（4月）"
 
-# ─── ヘッダー ───
-st.markdown("""
-<p class="adboard-title">AdBoard</p>
-<p class="adboard-subtitle">広告統合管理ダッシュボード</p>
-""", unsafe_allow_html=True)
-
-# タブナビ + 会社選択（同じ行）
-col_tabs, col_client = st.columns([8, 2])
+# ─── ヘッダー + 会社選択（同じ行） ───
+col_title, col_client = st.columns([8, 2])
+with col_title:
+    st.markdown("""
+    <p class="adboard-title">AdBoard</p>
+    <p class="adboard-subtitle">広告統合管理ダッシュボード</p>
+    """, unsafe_allow_html=True)
 with col_client:
     selected_client = st.selectbox(
         "クライアント選択", get_clients(),

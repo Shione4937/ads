@@ -119,20 +119,39 @@ header[data-testid="stHeader"] {{
     background-color: #f4f7fa !important;
 }}
 
-/* ===== ロゴ ===== */
-.adboard-logo-big {{
-    font-size: 32px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #7c3aed, #6366f1, #0ea5e9);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.5px;
-    line-height: 1.1;
+/* ===== ロゴ（Ad太字+Board細字+グラデ下線） ===== */
+.adboard-logo-wrap {{
+    display: inline-block;
+    padding: 4px 0 0 0;
+}}
+.adboard-logo-text {{
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    font-family: 'Inter', sans-serif;
+}}
+.adboard-logo-ad {{
+    color: #1e293b;
+    font-weight: 900;
+}}
+.adboard-logo-board {{
+    color: #94a3b8;
+    font-weight: 500;
+    margin-left: 4px;
+}}
+.adboard-logo-underline {{
+    height: 3px;
+    background: linear-gradient(90deg, #06b6d4 0%, #6366f1 50%, #c026d3 100%);
+    border-radius: 2px;
+    margin-top: 3px;
+    width: 100%;
 }}
 .adboard-sub-big {{
     color: #9ca3af;
-    font-size: 13px;
-    margin-top: 2px;
+    font-size: 11px;
+    margin-top: 6px;
+    letter-spacing: 0.2px;
 }}
 
 /* ===== トップナビゲーション ===== */
@@ -146,39 +165,40 @@ header[data-testid="stHeader"] {{
     justify-content: center;
 }}
 
+/* ===== トップナビゲーション ===== */
+/* トップナビのアイコン画像を縦中央揃え */
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] [data-testid="stImage"] {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+}}
+
 /* トップナビ用ボタンのCSSスコープマーカー */
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button {{
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button {{
     min-height: 60px !important;
     height: 60px !important;
-    padding: 8px 18px !important;
+    padding: 0 14px !important;
     border-radius: 12px !important;
-    text-align: left !important;
-    font-size: 16px !important;
+    text-align: center !important;
+    font-size: 15px !important;
     font-weight: 700 !important;
     border: 1px solid transparent !important;
     background-color: transparent !important;
-    color: #6b7280 !important;
-    line-height: 1 !important;
+    color: #475569 !important;
     box-shadow: none !important;
-    display: block !important;
 }}
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button > div,
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button p {{
-    margin: 0 !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    line-height: 60px !important;
-    text-align: left !important;
-}}
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button:hover {{
-    background-color: #f9fafb !important;
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button:hover {{
+    background-color: #ffffff !important;
     color: #1e1b4b !important;
     border-color: #e5e7eb !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
 }}
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button[kind="primary"] {{
-    background-color: {THEME["primary_light"]} !important;
-    color: {THEME["primary_dark"]} !important;
-    border: 1px solid {THEME["primary_light"]} !important;
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button[kind="primary"] {{
+    background-color: {THEME["primary"]} !important;
+    color: #ffffff !important;
+    border: 1px solid {THEME["primary"]} !important;
+    box-shadow: 0 2px 8px {THEME["shadow"]} !important;
 }}
 
 /* ===== タブ ===== */
@@ -417,57 +437,31 @@ hr {{ border-color: #f3f4f6 !important; }}
 
 # ─── ヘッダー（ロゴ + 4ナビ + クライアント を1行に） ───
 SECTIONS = ["分析", "広告管理", "予算設定", "全体設定"]
-
-# 各ナビアイテムのカラムインデックス（col_n1=2, col_n2=3, col_n3=4, col_n4=5 ※1始まり）
-# ※ nth-of-typeで指定するため、ロゴ列が1番目、ナビ1が2番目...という位置を使う
-nav_icon_css = ""
-for idx, name in enumerate(SECTIONS):
-    b64 = ICONS_B64.get(name, "")
-    if not b64:
-        continue
-    # idx=0 → 2番目のカラム（col_n1）, idx=1 → 3番目 ...
-    col_nth = idx + 2
-    nav_icon_css += f"""
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"]:nth-of-type({col_nth}) .stButton > button {{
-    background-image: url('data:image/png;base64,{b64}') !important;
-    background-repeat: no-repeat !important;
-    background-position: 14px center !important;
-    background-size: 32px 32px !important;
-    padding-left: 58px !important;
-}}
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"]:nth-of-type({col_nth}) .stButton > button:hover {{
-    background-image: url('data:image/png;base64,{b64}'), none !important;
-    background-color: #f9fafb !important;
-    background-repeat: no-repeat !important;
-    background-position: 14px center !important;
-    background-size: 32px 32px !important;
-}}
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"]:nth-of-type({col_nth}) .stButton > button[kind="primary"] {{
-    background-image: url('data:image/png;base64,{b64}') !important;
-    background-color: {THEME["primary_light"]} !important;
-    background-repeat: no-repeat !important;
-    background-position: 14px center !important;
-    background-size: 32px 32px !important;
-}}
-"""
-
-st.markdown(f"<style>{nav_icon_css}</style>", unsafe_allow_html=True)
-
-# ロゴ (col1) + 4ナビ (col2-5) + クライアント (col6) を1行に
-col_logo, col_n1, col_n2, col_n3, col_n4, col_client = st.columns([2.4, 1.4, 1.6, 1.6, 1.6, 1.4])
-
-with col_logo:
-    st.markdown("""
-    <div style="padding:8px 0 0 0;">
-        <div class="adboard-logo-big">AdBoard</div>
-        <div class="adboard-sub-big">広告統合管理ダッシュボード</div>
-    </div>
-    """, unsafe_allow_html=True)
+ICON_FILES = {
+    "分析":     "nav_analytics.png",
+    "広告管理": "nav_campaign.png",
+    "予算設定": "nav_budget.png",
+    "全体設定": "nav_settings.png",
+}
 
 # トップナビマーカー（CSSスコープ用）
 st.markdown('<div class="topnav-marker"></div>', unsafe_allow_html=True)
 
-# 各ナビボタンを配置
+# ロゴ + 4ナビ + クライアント を1行に
+col_logo, col_n1, col_n2, col_n3, col_n4, col_client = st.columns([2.2, 1.5, 1.7, 1.7, 1.7, 1.4])
+
+with col_logo:
+    st.markdown("""
+    <div class="adboard-logo-wrap">
+        <div class="adboard-logo-text">
+            <span class="adboard-logo-ad">Ad</span><span class="adboard-logo-board">Board</span>
+        </div>
+        <div class="adboard-logo-underline"></div>
+        <div class="adboard-sub-big">広告統合管理ダッシュボード</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# 各ナビカラム：アイコン画像 + ボタンを縦配置
 nav_data = [
     (col_n1, "分析"),
     (col_n2, "広告管理"),
@@ -476,12 +470,19 @@ nav_data = [
 ]
 for col, name in nav_data:
     with col:
-        is_active = st.session_state["section"] == name
-        btn_type = "primary" if is_active else "secondary"
-        if st.button(name, key=f"nav_{name}", use_container_width=True, type=btn_type):
-            if st.session_state["section"] != name:
-                st.session_state["section"] = name
-                st.rerun()
+        # サブカラムでアイコン（左）+ ボタン（右）を横並び
+        sub_img, sub_btn = st.columns([1, 2.2])
+        with sub_img:
+            icon_path = ROOT / "assets" / "icons" / ICON_FILES[name]
+            if icon_path.exists():
+                st.image(str(icon_path), width=48)
+        with sub_btn:
+            is_active = st.session_state["section"] == name
+            btn_type = "primary" if is_active else "secondary"
+            if st.button(name, key=f"nav_{name}", use_container_width=True, type=btn_type):
+                if st.session_state["section"] != name:
+                    st.session_state["section"] = name
+                    st.rerun()
 
 with col_client:
     st.write("")

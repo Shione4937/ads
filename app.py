@@ -119,33 +119,25 @@ header[data-testid="stHeader"] {{
     background-color: #f4f7fa !important;
 }}
 
-/* ===== ロゴ（Ad太字+Board細字+グラデ下線） ===== */
+/* ===== ロゴ（Ad紫+Board青） ===== */
 .adboard-logo-wrap {{
     display: inline-block;
-    padding: 4px 0 0 0;
+    padding: 6px 0 0 0;
 }}
 .adboard-logo-text {{
-    font-size: 38px;
+    font-size: 40px;
     font-weight: 900;
-    letter-spacing: -1px;
+    letter-spacing: -1.5px;
     line-height: 1;
     font-family: 'Inter', sans-serif;
 }}
 .adboard-logo-ad {{
-    color: #1e293b;
+    color: #7c3aed;
     font-weight: 900;
 }}
 .adboard-logo-board {{
-    color: #94a3b8;
-    font-weight: 500;
-    margin-left: 4px;
-}}
-.adboard-logo-underline {{
-    height: 3px;
-    background: linear-gradient(90deg, #06b6d4 0%, #6366f1 50%, #c026d3 100%);
-    border-radius: 2px;
-    margin-top: 3px;
-    width: 100%;
+    color: #3b82f6;
+    font-weight: 700;
 }}
 .adboard-sub-big {{
     color: #9ca3af;
@@ -166,7 +158,7 @@ header[data-testid="stHeader"] {{
 }}
 
 /* ===== トップナビゲーション ===== */
-/* トップナビのアイコン画像を縦中央揃え */
+/* アイコン画像を縦中央揃え */
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] [data-testid="stImage"] {{
     display: flex;
     align-items: center;
@@ -174,31 +166,30 @@ header[data-testid="stHeader"] {{
     height: 60px;
 }}
 
-/* トップナビ用ボタンのCSSスコープマーカー */
+/* ナビボタン：枠・背景なしのテキストだけスタイル */
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button {{
     min-height: 60px !important;
     height: 60px !important;
-    padding: 0 14px !important;
-    border-radius: 12px !important;
-    text-align: center !important;
-    font-size: 15px !important;
-    font-weight: 700 !important;
-    border: 1px solid transparent !important;
+    padding: 0 !important;
+    border: none !important;
     background-color: transparent !important;
-    color: #475569 !important;
+    color: #94a3b8 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
     box-shadow: none !important;
+    text-align: left !important;
 }}
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button:hover {{
-    background-color: #ffffff !important;
-    color: #1e1b4b !important;
-    border-color: #e5e7eb !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+    color: #475569 !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }}
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button[kind="primary"] {{
-    background-color: {THEME["primary"]} !important;
-    color: #ffffff !important;
-    border: 1px solid {THEME["primary"]} !important;
-    box-shadow: 0 2px 8px {THEME["shadow"]} !important;
+    color: #1e1b4b !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }}
 
 /* ===== タブ ===== */
@@ -456,7 +447,6 @@ with col_logo:
         <div class="adboard-logo-text">
             <span class="adboard-logo-ad">Ad</span><span class="adboard-logo-board">Board</span>
         </div>
-        <div class="adboard-logo-underline"></div>
         <div class="adboard-sub-big">広告統合管理ダッシュボード</div>
     </div>
     """, unsafe_allow_html=True)

@@ -1,12 +1,27 @@
 import streamlit as st
 from pathlib import Path
 import sys
+import base64
 sys.path.insert(0, str(Path(__file__).parent))
 from loader import get_clients, ALL_CLIENTS, DEFAULT_SELECTED
 
 st.set_page_config(page_title="AdBoard", layout="wide")
 
 ROOT = Path(__file__).parent
+
+# ─── アイコン画像をbase64化 ───
+def load_icon_b64(filename):
+    path = ROOT / "assets" / "icons" / filename
+    if path.exists():
+        return base64.b64encode(path.read_bytes()).decode("utf-8")
+    return ""
+
+ICONS_B64 = {
+    "分析":     load_icon_b64("nav_analytics.png"),
+    "広告管理": load_icon_b64("nav_campaign.png"),
+    "予算設定": load_icon_b64("nav_budget.png"),
+    "全体設定": load_icon_b64("nav_settings.png"),
+}
 
 # ─── セッションステート初期化 ───
 if "selected_clients" not in st.session_state:
@@ -124,29 +139,39 @@ header[data-testid="stHeader"] {{
 
 /* トップナビ用ボタンのCSSスコープマーカー */
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button {{
-    min-height: 64px !important;
-    padding: 10px 20px !important;
+    min-height: 60px !important;
+    height: 60px !important;
+    padding: 8px 18px !important;
     border-radius: 12px !important;
-    text-align: center !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
+    text-align: left !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
     border: 1px solid transparent !important;
     background: transparent !important;
     color: #6b7280 !important;
-    display: block !important;
-    white-space: pre-line !important;
-    line-height: 1.4 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+}}
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button > div,
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button p {{
+    display: inline !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
 }}
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button:hover {{
-    background: #ffffff !important;
+    background: #f9fafb !important;
     color: #1e1b4b !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+    border-color: #e5e7eb !important;
 }}
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button[kind="primary"] {{
-    background: #ffffff !important;
-    color: {THEME["primary"]} !important;
+    background: {THEME["primary_light"]} !important;
+    color: {THEME["primary_dark"]} !important;
     border: 1px solid {THEME["primary_light"]} !important;
-    box-shadow: 0 2px 10px {THEME["shadow"]} !important;
 }}
 
 /* ===== タブ ===== */
@@ -383,35 +408,57 @@ hr {{ border-color: #f3f4f6 !important; }}
 </style>
 """, unsafe_allow_html=True)
 
-# ─── ヘッダー（ロゴ + クライアント） ───
-col_logo, col_client = st.columns([8, 2])
+# ─── ヘッダー（ロゴ + 4ナビ + クライアント を1行に） ───
+SECTIONS = ["分析", "広告管理", "予算設定", "全体設定"]
+
+# 各ナビアイテムのカラムインデックス（col_n1=2, col_n2=3, col_n3=4, col_n4=5 ※1始まり）
+# ※ nth-of-typeで指定するため、ロゴ列が1番目、ナビ1が2番目...という位置を使う
+nav_icon_css = ""
+for idx, name in enumerate(SECTIONS):
+    b64 = ICONS_B64.get(name, "")
+    if not b64:
+        continue
+    # idx=0 → 2番目のカラム（col_n1）, idx=1 → 3番目 ...
+    col_nth = idx + 2
+    nav_icon_css += f"""
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"]:nth-of-type({col_nth}) .stButton > button::before {{
+    content: '';
+    display: inline-block;
+    width: 38px;
+    height: 38px;
+    background-image: url('data:image/png;base64,{b64}');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+}}
+"""
+
+st.markdown(f"<style>{nav_icon_css}</style>", unsafe_allow_html=True)
+
+# ロゴ (col1) + 4ナビ (col2-5) + クライアント (col6) を1行に
+col_logo, col_n1, col_n2, col_n3, col_n4, col_client = st.columns([2.4, 1.4, 1.6, 1.6, 1.6, 1.4])
+
 with col_logo:
     st.markdown("""
-    <div style="padding:4px 0 10px 0;">
+    <div style="padding:8px 0 0 0;">
         <div class="adboard-logo-big">AdBoard</div>
         <div class="adboard-sub-big">広告統合管理ダッシュボード</div>
     </div>
     """, unsafe_allow_html=True)
-with col_client:
-    st.write("")
-    st.write("")
-    selected_client = st.selectbox(
-        "クライアント選択", get_clients(),
-        index=get_clients().index(st.session_state["client"]),
-        label_visibility="collapsed"
-    )
-    st.session_state["client"] = selected_client
 
-# ─── トップナビゲーション（4セクション） ───
+# トップナビマーカー（CSSスコープ用）
 st.markdown('<div class="topnav-marker"></div>', unsafe_allow_html=True)
-nav_cols = st.columns(4)
-SECTIONS = [
-    ("分析",     "analytics"),
-    ("広告管理", "campaign"),
-    ("予算設定", "savings"),
-    ("全体設定", "settings"),
+
+# 各ナビボタンを配置
+nav_data = [
+    (col_n1, "分析"),
+    (col_n2, "広告管理"),
+    (col_n3, "予算設定"),
+    (col_n4, "全体設定"),
 ]
-for col, (name, icon) in zip(nav_cols, SECTIONS):
+for col, name in nav_data:
     with col:
         is_active = st.session_state["section"] == name
         btn_type = "primary" if is_active else "secondary"
@@ -419,6 +466,15 @@ for col, (name, icon) in zip(nav_cols, SECTIONS):
             if st.session_state["section"] != name:
                 st.session_state["section"] = name
                 st.rerun()
+
+with col_client:
+    st.write("")
+    selected_client = st.selectbox(
+        "クライアント選択", get_clients(),
+        index=get_clients().index(st.session_state["client"]),
+        label_visibility="collapsed"
+    )
+    st.session_state["client"] = selected_client
 
 st.write("")
 

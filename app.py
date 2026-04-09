@@ -118,9 +118,18 @@ header[data-testid="stHeader"] {{
 }}
 
 .block-container {{
-    padding-top: 0.3rem !important;
+    padding-top: 0 !important;
     padding-bottom: 1rem !important;
+    margin-top: 0 !important;
     background: transparent !important;
+}}
+/* Streamlitのデフォルト上部スペースを削除 */
+[data-testid="stAppViewContainer"] > .main {{
+    padding-top: 0 !important;
+}}
+[data-testid="stMain"] > div:first-child {{
+    padding-top: 0 !important;
+    margin-top: 0 !important;
 }}
 
 /* タブコンテンツ内は透明（背後のグレーが透ける） */
@@ -223,13 +232,11 @@ html body .stApp div.st-key-nav_analytics button[kind="primary"],
 html body .stApp div.st-key-nav_campaign button[kind="primary"],
 html body .stApp div.st-key-nav_budget button[kind="primary"],
 html body .stApp div.st-key-nav_settings button[kind="primary"] {{
-    color: #94a3b8 !important;
-    background-color: transparent !important;
+    color: #475569 !important;
+    background-color: {THEME["primary_light"]} !important;
     border: 0 !important;
-    border-bottom: 3px solid {THEME["primary"]} !important;
-    border-radius: 0 !important;
+    border-radius: 22px !important;
     box-shadow: none !important;
-    padding-bottom: 4px !important;
 }}
 /* ナビ内のアイコン画像を縦中央揃え・小さめに */
 [data-testid="column"] [data-testid="column"] [data-testid="stImage"] {{
@@ -516,15 +523,21 @@ for name, b64_key in [("分析", "nav_analytics"), ("広告管理", "nav_campaig
     b64 = ICONS_B64.get(name, "")
     if b64:
         nav_bg_css += f"""
-html body .stApp div.st-key-{b64_key} button,
-html body .stApp div.st-key-{b64_key} button[kind="primary"],
-html body .stApp div.st-key-{b64_key} button[kind="secondary"] {{
+html body .stApp div.st-key-{b64_key} button {{
     background-image: url('data:image/png;base64,{b64}') !important;
     background-repeat: no-repeat !important;
-    background-position: 0 center !important;
-    background-size: 26px 26px !important;
-    padding-left: 32px !important;
-    padding-right: 4px !important;
+    background-position: 8px center !important;
+    background-size: 24px 24px !important;
+    padding-left: 38px !important;
+    padding-right: 14px !important;
+}}
+html body .stApp div.st-key-{b64_key} button[kind="primary"] {{
+    background-image: url('data:image/png;base64,{b64}') !important;
+    background-repeat: no-repeat !important;
+    background-position: 8px center !important;
+    background-size: 24px 24px !important;
+    padding-left: 38px !important;
+    padding-right: 14px !important;
 }}
 html body .stApp div.st-key-{b64_key} button > div,
 html body .stApp div.st-key-{b64_key} button p {{

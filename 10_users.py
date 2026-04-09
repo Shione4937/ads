@@ -8,9 +8,9 @@ st.write("")
 # デモ用ユーザーデータ
 if "users_list" not in st.session_state:
     st.session_state["users_list"] = [
-        {"name": "山田 太郎", "email": "yamada@example.com", "role": "管理者",     "last_login": "2026-04-14"},
-        {"name": "鈴木 花子", "email": "suzuki@example.com", "role": "運用担当",   "last_login": "2026-04-13"},
-        {"name": "佐藤 次郎", "email": "sato@example.com",   "role": "閲覧のみ",   "last_login": "2026-04-10"},
+        {"name": "瀬尾",   "email": "seo@example.com",     "role": "管理者",   "last_login": "2026-04-14"},
+        {"name": "森田",   "email": "morita@example.com",  "role": "運用者",   "last_login": "2026-04-13"},
+        {"name": "大久保", "email": "okubo@example.com",   "role": "閲覧のみ", "last_login": "2026-04-10"},
     ]
 
 # ─── 新規追加ボタン ───
@@ -26,7 +26,7 @@ st.write("")
 # ─── ユーザーリスト ───
 ROLE_STYLES = {
     "管理者":   {"bg": "#ede9fe", "color": "#6d28d9"},
-    "運用担当": {"bg": "#dbeafe", "color": "#1d4ed8"},
+    "運用者":   {"bg": "#dbeafe", "color": "#1d4ed8"},
     "閲覧のみ": {"bg": "#f3f4f6", "color": "#6b7280"},
 }
 
@@ -70,4 +70,4 @@ for user in st.session_state["users_list"]:
                     st.rerun()
 
 st.write("")
-st.caption("権限レベル：管理者＝全機能 / 運用担当＝閲覧＋入稿 / 閲覧のみ＝ダッシュボード閲覧のみ")
+st.caption("権限レベル：管理者＝全機能 / 運用者＝閲覧＋入稿 / 閲覧のみ＝ダッシュボード閲覧のみ")

@@ -105,27 +105,28 @@ header[data-testid="stHeader"] {{
     display: none !important;
 }}
 
-/* ===== 背景色 ===== */
-/* 全体は白（ヘッダー/ナビ部分用） */
+/* ===== 背景色（全幅2層：上=白 / 下=グレー） ===== */
+/* ブラウザ全幅で上は白、下は #f4f7fa を出すために linear-gradient を使用 */
+.stApp {{
+    background: linear-gradient(to bottom, #ffffff 0px, #ffffff 180px, #f4f7fa 180px, #f4f7fa 100%) !important;
+    background-attachment: fixed !important;
+}}
 [data-testid="stAppViewContainer"],
 [data-testid="stMain"],
-.main,
-.stApp {{
-    background-color: #ffffff !important;
-}}
-
-/* タブコンテンツ内（ダッシュボード部分）は#f4f7fa */
-[role="tabpanel"] {{
-    background-color: #f4f7fa !important;
-    padding: 20px !important;
-    border-radius: 12px !important;
-    margin-top: 12px;
+.main {{
+    background: transparent !important;
 }}
 
 .block-container {{
     padding-top: 1.2rem !important;
     padding-bottom: 1rem !important;
-    background-color: #ffffff !important;
+    background: transparent !important;
+}}
+
+/* タブコンテンツ内は透明（背後のグレーが透ける） */
+[role="tabpanel"] {{
+    background: transparent !important;
+    padding-top: 12px !important;
 }}
 
 /* ===== ロゴ（Ad紫+Board青） ===== */
@@ -166,9 +167,15 @@ header[data-testid="stHeader"] {{
     justify-content: center;
 }}
 
-/* ===== トップナビゲーション ===== */
-/* ネストされたカラム内のボタンのみを狙う（他のどのページにも該当しない構造） */
-[data-testid="column"] [data-testid="column"] .stButton > button {{
+/* ===== トップナビゲーション（st-key-* クラスで確実に狙う） ===== */
+.st-key-nav_analytics .stButton > button,
+.st-key-nav_campaign .stButton > button,
+.st-key-nav_budget .stButton > button,
+.st-key-nav_settings .stButton > button,
+.st-key-nav_analytics button,
+.st-key-nav_campaign button,
+.st-key-nav_budget button,
+.st-key-nav_settings button {{
     min-height: 60px !important;
     height: 60px !important;
     padding: 0 !important;
@@ -183,27 +190,39 @@ header[data-testid="stHeader"] {{
     box-shadow: none !important;
     text-align: left !important;
 }}
-[data-testid="column"] [data-testid="column"] .stButton > button:hover {{
+.st-key-nav_analytics button:hover,
+.st-key-nav_campaign button:hover,
+.st-key-nav_budget button:hover,
+.st-key-nav_settings button:hover {{
     color: #475569 !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }}
-[data-testid="column"] [data-testid="column"] .stButton > button:focus,
-[data-testid="column"] [data-testid="column"] .stButton > button:active {{
+.st-key-nav_analytics button:focus,
+.st-key-nav_campaign button:focus,
+.st-key-nav_budget button:focus,
+.st-key-nav_settings button:focus,
+.st-key-nav_analytics button:active,
+.st-key-nav_campaign button:active,
+.st-key-nav_budget button:active,
+.st-key-nav_settings button:active {{
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
 }}
-[data-testid="column"] [data-testid="column"] .stButton > button[kind="primary"] {{
+.st-key-nav_analytics button[kind="primary"],
+.st-key-nav_campaign button[kind="primary"],
+.st-key-nav_budget button[kind="primary"],
+.st-key-nav_settings button[kind="primary"] {{
     color: #1e1b4b !important;
     background: transparent !important;
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }}
-/* ネストされたカラム内のアイコン画像を縦中央揃え */
+/* ナビ内のアイコン画像を縦中央揃え */
 [data-testid="column"] [data-testid="column"] [data-testid="stImage"] {{
     display: flex;
     align-items: center;
@@ -453,9 +472,12 @@ ICON_FILES = {
     "予算設定": "nav_budget.png",
     "全体設定": "nav_settings.png",
 }
-
-# トップナビマーカー（CSSスコープ用）
-st.markdown('<div class="topnav-marker"></div>', unsafe_allow_html=True)
+NAV_KEYS = {
+    "分析":     "nav_analytics",
+    "広告管理": "nav_campaign",
+    "予算設定": "nav_budget",
+    "全体設定": "nav_settings",
+}
 
 # ロゴ + 4ナビ + クライアント を1行に
 col_logo, col_n1, col_n2, col_n3, col_n4, col_client = st.columns([2.2, 1.5, 1.7, 1.7, 1.7, 1.4])
@@ -488,7 +510,7 @@ for col, name in nav_data:
         with sub_btn:
             is_active = st.session_state["section"] == name
             btn_type = "primary" if is_active else "secondary"
-            if st.button(name, key=f"nav_{name}", use_container_width=True, type=btn_type):
+            if st.button(name, key=NAV_KEYS[name], use_container_width=True, type=btn_type):
                 if st.session_state["section"] != name:
                     st.session_state["section"] = name
                     st.rerun()

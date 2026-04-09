@@ -180,6 +180,8 @@ html body .stApp div.st-key-nav_budget button,
 html body .stApp div.st-key-nav_settings button {{
     min-height: 44px !important;
     height: 44px !important;
+    width: fit-content !important;
+    min-width: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
     border: 0 !important;
@@ -191,7 +193,7 @@ html body .stApp div.st-key-nav_settings button {{
     box-shadow: none !important;
     text-align: left !important;
     outline: none !important;
-    display: flex !important;
+    display: inline-flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
 }}
@@ -221,7 +223,7 @@ html body .stApp div.st-key-nav_analytics button[kind="primary"],
 html body .stApp div.st-key-nav_campaign button[kind="primary"],
 html body .stApp div.st-key-nav_budget button[kind="primary"],
 html body .stApp div.st-key-nav_settings button[kind="primary"] {{
-    color: #1e1b4b !important;
+    color: {THEME["primary"]} !important;
     background-color: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
@@ -517,8 +519,9 @@ html body .stApp div.st-key-{b64_key} button[kind="secondary"] {{
     background-image: url('data:image/png;base64,{b64}') !important;
     background-repeat: no-repeat !important;
     background-position: 0 center !important;
-    background-size: 28px 28px !important;
-    padding-left: 38px !important;
+    background-size: 26px 26px !important;
+    padding-left: 32px !important;
+    padding-right: 4px !important;
 }}
 html body .stApp div.st-key-{b64_key} button > div,
 html body .stApp div.st-key-{b64_key} button p {{

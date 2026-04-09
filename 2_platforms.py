@@ -32,15 +32,7 @@ for tab, platform in zip(tabs, ["google","yahoo","meta","tiktok"]):
         c1.metric("費用",    f"¥{int(pf['cost'].sum()):,.0f}")
         c2.metric("IMP",     f"{int(pf['imp'].sum()):,.0f}")
         c3.metric("クリック", f"{int(pf['click'].sum()):,.0f}")
-        c4.metric("CV",      f"{int(pf['cv'].sum()):,.0f}" if platform!="meta" else "未計測")
-
-        if platform=="meta":
-            st.markdown("""
-            <div style="background:linear-gradient(135deg,#f0f9ff,#eef2ff);border:1px solid rgba(56,189,248,0.2);
-                        border-radius:10px;padding:12px 16px;margin:8px 0;">
-                <span style="color:#0284c7;font-weight:600;">ℹ️ MetaはCSVエクスポートにCV列が含まれません。API連携後に取得可能になります。</span>
-            </div>
-            """, unsafe_allow_html=True)
+        c4.metric("CV",      f"{int(pf['cv'].sum()):,.0f}")
 
         camp = pf.groupby("campaign").agg(cost=("cost","sum"),imp=("imp","sum"),
                click=("click","sum"),cv=("cv","sum")).reset_index()

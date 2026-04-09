@@ -39,9 +39,6 @@ def get_summary(df):
     summary["ctr"] = (summary["click"] / summary["imp"].replace(0,1) * 100).round(2)
     summary["cpc"] = (summary["cost"] / summary["click"].replace(0,1)).round(0)
     summary["cpa"] = (summary["cost"] / summary["cv"].replace(0,1)).round(0)
-    meta_mask = summary["platform"] == "meta"
-    summary.loc[meta_mask, "cv"] = 0
-    summary.loc[meta_mask, "cpa"] = None
     return summary
 
 
@@ -53,7 +50,7 @@ def get_all_clients_summary(clients, date_from, date_to):
         cost = cdf["cost"].sum()
         imp  = cdf["imp"].sum()
         click= cdf["click"].sum()
-        cv   = cdf[cdf["platform"] != "meta"]["cv"].sum()
+        cv   = cdf["cv"].sum()
         budget = cdf["budget_monthly"].iloc[0] if len(cdf) > 0 else 0
         target_cpa = cdf["target_cpa"].iloc[0] if len(cdf) > 0 else 0
         cpa  = round(cost / cv) if cv > 0 else None
@@ -63,7 +60,6 @@ def get_all_clients_summary(clients, date_from, date_to):
         alerts = []
         if pct >= 90: alerts.append("予算90%超")
         if cpa and target_cpa and cpa > target_cpa * 1.5: alerts.append("CPA超過")
-        if cdf[cdf["platform"]=="meta"]["cost"].sum() > 0: alerts.append("Meta未計測")
 
         rows.append({
             "client": client,

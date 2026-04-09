@@ -21,8 +21,6 @@ for _, row in df.iterrows():
         badges += '<span style="background:#fee2e2;color:#dc2626;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;margin-left:6px;">予算90%超</span>'
     if "CPA超過" in row["alerts"]:
         badges += '<span style="background:#fef3c7;color:#d97706;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;margin-left:6px;">CPA超過</span>'
-    if "Meta未計測" in row["alerts"]:
-        badges += '<span style="background:#e0f2fe;color:#0284c7;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;margin-left:6px;">Meta未計測</span>'
 
     with st.container(border=True):
         c1, c2, c3, c4, c5, c6, c7 = st.columns([1.8, 2.2, 2, 1, 1.8, 1.5, 0.8])

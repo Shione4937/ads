@@ -33,7 +33,7 @@ st.caption(f"{d_from} 〜 {d_to}")
 total_cost = int(df["cost"].sum())
 total_imp  = int(df["imp"].sum())
 total_click= int(df["click"].sum())
-total_cv   = int(df[df["platform"]!="meta"]["cv"].sum())
+total_cv   = int(df["cv"].sum())
 total_cpa  = int(total_cost/total_cv) if total_cv>0 else 0
 
 c1,c2,c3,c4,c5 = st.columns(5)
@@ -58,8 +58,8 @@ st.markdown("""
     <p style="color:#374151;font-size:14px;line-height:1.7;margin:0;">
 """ + f"""{client}の{period}実績：総費用¥{total_cost:,.0f}に対しCV{total_cv:,}件・平均CPA¥{total_cpa:,.0f}。
 GoogleがCPA効率良好で引き続き重点投資が有効です。
-MetaはCV未計測のためAPI連携による計測環境整備を優先推奨します。
-YahooはCPAが目標を超過傾向にあり、キャンペーン構成の見直しを検討してください。""" + """
+YahooはCPAが目標を超過傾向にあり、キャンペーン構成の見直しを検討してください。
+MetaとTikTokはCVR改善の余地があり、ターゲティング最適化を推奨します。""" + """
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -73,7 +73,7 @@ with col1:
     disp["費用"] = disp["cost"].apply(lambda x: f"¥{x:,.0f}")
     disp["IMP"]  = disp["imp"].apply(lambda x: f"{x:,.0f}")
     disp["クリック"] = disp["click"].apply(lambda x: f"{x:,.0f}")
-    disp["CV"]   = disp["cv"].apply(lambda x: f"{x:,.0f}" if x>0 else "未計測")
+    disp["CV"]   = disp["cv"].apply(lambda x: f"{x:,.0f}")
     disp["CPA"]  = disp.apply(lambda r: f"¥{r['cpa']:,.0f}" if pd.notna(r["cpa"]) and r["cpa"]<9999999 else "—", axis=1)
     disp["CTR"]  = disp["ctr"].apply(lambda x: f"{x:.2f}%")
     st.dataframe(disp[["媒体","費用","IMP","クリック","CV","CPA","CTR"]], use_container_width=True, hide_index=True)
@@ -120,9 +120,7 @@ st.plotly_chart(fig2, use_container_width=True)
 alerts = []
 target_cpa = int(df["target_cpa"].iloc[0]) if len(df)>0 else 5000
 for _, row in summary.iterrows():
-    if row["platform"]=="meta":
-        alerts.append(("CV未計測：Meta",f"¥{row['cost']:,.0f}消化中・CV計測なし。API連携で解決可能"))
-    elif pd.notna(row["cpa"]) and row["cpa"] > target_cpa * 1.5:
+    if pd.notna(row["cpa"]) and row["cpa"] > target_cpa * 1.5:
         alerts.append((f"CPA超過：{PNAMES[row['platform']]}",f"CPA ¥{row['cpa']:,.0f}（目標¥{target_cpa:,}）"))
 if alerts:
     st.markdown(f"**アラート（{len(alerts)}件）**")

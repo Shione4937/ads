@@ -106,17 +106,26 @@ header[data-testid="stHeader"] {{
 }}
 
 /* ===== 背景色 ===== */
+/* 全体は白（ヘッダー/ナビ部分用） */
 [data-testid="stAppViewContainer"],
 [data-testid="stMain"],
 .main,
 .stApp {{
+    background-color: #ffffff !important;
+}}
+
+/* タブコンテンツ内（ダッシュボード部分）は#f4f7fa */
+[role="tabpanel"] {{
     background-color: #f4f7fa !important;
+    padding: 20px !important;
+    border-radius: 12px !important;
+    margin-top: 12px;
 }}
 
 .block-container {{
     padding-top: 1.2rem !important;
     padding-bottom: 1rem !important;
-    background-color: #f4f7fa !important;
+    background-color: #ffffff !important;
 }}
 
 /* ===== ロゴ（Ad紫+Board青） ===== */
@@ -158,38 +167,48 @@ header[data-testid="stHeader"] {{
 }}
 
 /* ===== トップナビゲーション ===== */
-/* アイコン画像を縦中央揃え */
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] [data-testid="stImage"] {{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 60px;
-}}
-
-/* ナビボタン：枠・背景なしのテキストだけスタイル */
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button {{
+/* ネストされたカラム内のボタンのみを狙う（他のどのページにも該当しない構造） */
+[data-testid="column"] [data-testid="column"] .stButton > button {{
     min-height: 60px !important;
     height: 60px !important;
     padding: 0 !important;
     border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
     background-color: transparent !important;
+    background-image: none !important;
     color: #94a3b8 !important;
     font-size: 16px !important;
     font-weight: 700 !important;
     box-shadow: none !important;
     text-align: left !important;
 }}
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button:hover {{
+[data-testid="column"] [data-testid="column"] .stButton > button:hover {{
     color: #475569 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}}
+[data-testid="column"] [data-testid="column"] .stButton > button:focus,
+[data-testid="column"] [data-testid="column"] .stButton > button:active {{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}}
+[data-testid="column"] [data-testid="column"] .stButton > button[kind="primary"] {{
+    color: #1e1b4b !important;
+    background: transparent !important;
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }}
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) ~ div [data-testid="stHorizontalBlock"] [data-testid="stHorizontalBlock"] .stButton > button[kind="primary"] {{
-    color: #1e1b4b !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+/* ネストされたカラム内のアイコン画像を縦中央揃え */
+[data-testid="column"] [data-testid="column"] [data-testid="stImage"] {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
 }}
 
 /* ===== タブ ===== */

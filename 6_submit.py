@@ -23,18 +23,17 @@ STEPS = [
 col_h1, col_h2 = st.columns([8, 2])
 with col_h1:
     st.markdown(f"""
-    <div class="submit-header">
-        <div>
-            <span class="submit-title">プロモーション新規作成</span>
-            <span style="color:#9ca3af;font-size:13px;margin-left:16px;">対象クライアント：<strong style="color:#6366f1;">{client}</strong></span>
+    <div style="padding:4px 0 12px 0;">
+        <div style="font-size:16px;font-weight:700;color:#1e1b4b;">プロモーション新規作成</div>
+        <div style="color:#9ca3af;font-size:12px;margin-top:2px;">
+            対象クライアント：<strong style="color:#0284c7;">{client}</strong>
         </div>
     </div>
     """, unsafe_allow_html=True)
 with col_h2:
-    if st.button("× 作成を中断", key="cancel_submit"):
+    if st.button("入力をリセット", key="cancel_submit"):
         st.session_state["submit_step"] = 1
         st.session_state["submit_data"] = {}
-        st.session_state["mode"] = "分析"
         st.rerun()
 
 # ─── ステップインジケーター ───

@@ -15,82 +15,138 @@ if "client" not in st.session_state:
     st.session_state["client"] = DEFAULT_SELECTED[0]
 if "period" not in st.session_state:
     st.session_state["period"] = "今月（4月）"
-if "mode" not in st.session_state:
-    st.session_state["mode"] = "分析"
+if "section" not in st.session_state:
+    st.session_state["section"] = "分析"
 if "submit_step" not in st.session_state:
     st.session_state["submit_step"] = 1
 if "submit_data" not in st.session_state:
     st.session_state["submit_data"] = {}
 
-# ─── モード別カラーパレット ───
-if st.session_state["mode"] == "入稿":
-    # 入稿モード：水色系
-    THEME = {
-        "primary":        "#0ea5e9",
-        "primary_dark":   "#0284c7",
-        "primary_light":  "#e0f2fe",
-        "primary_50":     "#f0f9ff",
-        "accent":         "#06b6d4",
-        "gradient":       "linear-gradient(135deg, #38bdf8, #0ea5e9)",
-        "gradient_soft":  "linear-gradient(90deg, #e0f2fe 0%, #cffafe 50%, #e0f7fa 100%)",
-        "underline":      "linear-gradient(90deg, #7dd3fc, #38bdf8, #06b6d4)",
-        "logo_gradient":  "linear-gradient(135deg, #0284c7, #06b6d4)",
-        "shadow":         "rgba(14,165,233,0.25)",
-        "shadow_light":   "rgba(14,165,233,0.08)",
-    }
-else:
-    # 分析モード：紫系
-    THEME = {
-        "primary":        "#6366f1",
-        "primary_dark":   "#4f46e5",
-        "primary_light":  "#f5f3ff",
-        "primary_50":     "#fafbff",
-        "accent":         "#7c3aed",
-        "gradient":       "linear-gradient(135deg, #7c3aed, #6366f1)",
-        "gradient_soft":  "linear-gradient(90deg, #ede9fe 0%, #e0e7ff 50%, #dbeafe 100%)",
-        "underline":      "linear-gradient(90deg, #c4b5fd, #818cf8, #7dd3fc)",
-        "logo_gradient":  "linear-gradient(135deg, #7c3aed, #6366f1)",
-        "shadow":         "rgba(99,102,241,0.3)",
-        "shadow_light":   "rgba(99,102,241,0.08)",
-    }
+# ─── セクション別カラーパレット ───
+SECTION_THEMES = {
+    "分析": {
+        "primary":       "#6366f1",
+        "primary_dark":  "#4f46e5",
+        "primary_light": "#f5f3ff",
+        "primary_50":    "#fafbff",
+        "gradient":      "linear-gradient(135deg, #7c3aed, #6366f1)",
+        "gradient_soft": "linear-gradient(90deg, #ede9fe 0%, #e0e7ff 50%, #dbeafe 100%)",
+        "underline":     "linear-gradient(90deg, #c4b5fd, #818cf8, #7dd3fc)",
+        "shadow":        "rgba(99,102,241,0.3)",
+        "shadow_light":  "rgba(99,102,241,0.08)",
+        "icon":          "analytics",
+    },
+    "広告管理": {
+        "primary":       "#0ea5e9",
+        "primary_dark":  "#0284c7",
+        "primary_light": "#e0f2fe",
+        "primary_50":    "#f0f9ff",
+        "gradient":      "linear-gradient(135deg, #38bdf8, #0ea5e9)",
+        "gradient_soft": "linear-gradient(90deg, #e0f2fe 0%, #cffafe 50%, #e0f7fa 100%)",
+        "underline":     "linear-gradient(90deg, #7dd3fc, #38bdf8, #06b6d4)",
+        "shadow":        "rgba(14,165,233,0.3)",
+        "shadow_light":  "rgba(14,165,233,0.08)",
+        "icon":          "campaign",
+    },
+    "予算設定": {
+        "primary":       "#10b981",
+        "primary_dark":  "#059669",
+        "primary_light": "#d1fae5",
+        "primary_50":    "#f0fdf4",
+        "gradient":      "linear-gradient(135deg, #34d399, #10b981)",
+        "gradient_soft": "linear-gradient(90deg, #d1fae5 0%, #ccfbf1 50%, #dcfce7 100%)",
+        "underline":     "linear-gradient(90deg, #6ee7b7, #34d399, #14b8a6)",
+        "shadow":        "rgba(16,185,129,0.3)",
+        "shadow_light":  "rgba(16,185,129,0.08)",
+        "icon":          "savings",
+    },
+    "全体設定": {
+        "primary":       "#64748b",
+        "primary_dark":  "#475569",
+        "primary_light": "#f1f5f9",
+        "primary_50":    "#f8fafc",
+        "gradient":      "linear-gradient(135deg, #94a3b8, #64748b)",
+        "gradient_soft": "linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)",
+        "underline":     "linear-gradient(90deg, #cbd5e1, #94a3b8, #64748b)",
+        "shadow":        "rgba(100,116,139,0.3)",
+        "shadow_light":  "rgba(100,116,139,0.08)",
+        "icon":          "settings",
+    },
+}
+
+THEME = SECTION_THEMES[st.session_state["section"]]
 
 # ─── グローバルCSS（テーマ適用） ───
 st.markdown(f"""
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
 html, body, [class*="css"] {{
     font-family: 'Inter', 'Noto Sans JP', sans-serif;
 }}
 
-/* ===== Streamlit デフォルトヘッダー非表示 ===== */
 header[data-testid="stHeader"] {{
     display: none !important;
 }}
 
-/* ===== ページ余白 ===== */
 .block-container {{
     padding-top: 1.2rem !important;
     padding-bottom: 1rem !important;
 }}
 
-/* ===== ヘッダー ===== */
-.adboard-header {{
-    padding: 10px 0 14px 0;
-    border-bottom: 2px solid transparent;
-    border-image: {THEME["underline"]} 1;
-    margin-bottom: 6px;
-}}
-.adboard-logo {{
-    font-size: 24px;
-    font-weight: 700;
-    background: {THEME["logo_gradient"]};
+/* ===== ロゴ ===== */
+.adboard-logo-big {{
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c3aed, #6366f1, #0ea5e9);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
 }}
-.adboard-sub {{
+.adboard-sub-big {{
     color: #9ca3af;
     font-size: 13px;
-    margin-top: 1px;
+    margin-top: 2px;
+}}
+
+/* ===== トップナビゲーション ===== */
+.top-nav {{
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    background: #f9fafb;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    justify-content: center;
+}}
+
+/* トップナビ用ボタンのCSSスコープマーカー */
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button {{
+    min-height: 64px !important;
+    padding: 10px 20px !important;
+    border-radius: 12px !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    color: #6b7280 !important;
+    display: block !important;
+    white-space: pre-line !important;
+    line-height: 1.4 !important;
+}}
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button:hover {{
+    background: #ffffff !important;
+    color: #1e1b4b !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+}}
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button[kind="primary"] {{
+    background: #ffffff !important;
+    color: {THEME["primary"]} !important;
+    border: 1px solid {THEME["primary_light"]} !important;
+    box-shadow: 0 2px 10px {THEME["shadow"]} !important;
 }}
 
 /* ===== タブ ===== */
@@ -119,7 +175,7 @@ header[data-testid="stHeader"] {{
     background: {THEME["shadow_light"]} !important;
 }}
 
-/* ===== メトリックカード（KPI） ===== */
+/* ===== メトリックカード ===== */
 [data-testid="stMetric"] {{
     background: #ffffff;
     border: 1px solid #e5e7eb;
@@ -176,7 +232,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] > div {{
     border-color: {THEME["primary"]} !important;
 }}
 
-/* ===== ボタン ===== */
+/* ===== ボタン（一般） ===== */
 .stButton > button {{
     border-radius: 8px;
     font-weight: 600;
@@ -214,53 +270,17 @@ div[data-testid="stVerticalBlockBorderWrapper"] > div {{
     border: 1px solid #e5e7eb;
 }}
 
-/* ===== アラート ===== */
 [data-testid="stAlert"] {{ border-radius: 8px; }}
-
-/* ===== Divider ===== */
 hr {{ border-color: #f3f4f6 !important; }}
 
-/* ===== マルチセレクト ===== */
 [data-baseweb="tag"] {{
     background: {THEME["primary"]} !important;
     border-radius: 6px !important;
 }}
 
-/* ===== Expander ===== */
 [data-testid="stExpander"] {{
     border: 1px solid #e5e7eb !important;
     border-radius: 10px !important;
-}}
-
-/* ===== モード切替ラジオ ===== */
-div[data-testid="stRadio"] > label {{
-    display: none;
-}}
-div[data-testid="stRadio"] [role="radiogroup"] {{
-    background: #f3f4f6;
-    border-radius: 10px;
-    padding: 4px;
-    gap: 2px;
-    border: 1px solid #e5e7eb;
-}}
-div[data-testid="stRadio"] [role="radiogroup"] label {{
-    background: transparent;
-    padding: 8px 24px;
-    border-radius: 7px;
-    font-weight: 600;
-    font-size: 13px;
-    color: #6b7280;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    margin: 0 !important;
-}}
-div[data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) {{
-    background: {THEME["gradient"]};
-    color: #ffffff;
-    box-shadow: 0 2px 6px {THEME["shadow"]};
-}}
-div[data-testid="stRadio"] [role="radiogroup"] label > div:first-child {{
-    display: none;
 }}
 
 /* ===== 入稿モード用スタイル ===== */
@@ -359,33 +379,21 @@ div[data-testid="stRadio"] [role="radiogroup"] label > div:first-child {{
     box-shadow: 0 2px 12px {THEME["shadow"]} !important;
 }}
 
-/* ===== サイドバー非表示 ===== */
 [data-testid="stSidebar"] {{ display: none; }}
 </style>
 """, unsafe_allow_html=True)
 
-# ─── ヘッダー（ロゴ + モード切替 + クライアント） ───
-col_title, col_mode, col_client = st.columns([5, 3, 2])
-with col_title:
+# ─── ヘッダー（ロゴ + クライアント） ───
+col_logo, col_client = st.columns([8, 2])
+with col_logo:
     st.markdown("""
-    <div class="adboard-header">
-        <div class="adboard-logo">AdBoard</div>
-        <div class="adboard-sub">広告統合管理ダッシュボード</div>
+    <div style="padding:4px 0 10px 0;">
+        <div class="adboard-logo-big">AdBoard</div>
+        <div class="adboard-sub-big">広告統合管理ダッシュボード</div>
     </div>
     """, unsafe_allow_html=True)
-with col_mode:
-    st.write("")
-    mode = st.radio(
-        "モード", ["分析", "入稿"],
-        index=["分析","入稿"].index(st.session_state["mode"]),
-        horizontal=True,
-        label_visibility="collapsed",
-        key="mode_radio",
-    )
-    if mode != st.session_state["mode"]:
-        st.session_state["mode"] = mode
-        st.rerun()
 with col_client:
+    st.write("")
     st.write("")
     selected_client = st.selectbox(
         "クライアント選択", get_clients(),
@@ -394,13 +402,33 @@ with col_client:
     )
     st.session_state["client"] = selected_client
 
-# ─── モードに応じて画面切替 ───
-if st.session_state["mode"] == "入稿":
-    exec(open(str(ROOT / "6_submit.py"), encoding="utf-8").read())
-else:
-    # ─── 分析モード：タブナビ ───
-    tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "全社一覧", "サマリー", "媒体別詳細", "予算管理", "レポート", "設定",
+# ─── トップナビゲーション（4セクション） ───
+st.markdown('<div class="topnav-marker"></div>', unsafe_allow_html=True)
+nav_cols = st.columns(4)
+SECTIONS = [
+    ("分析",     "analytics"),
+    ("広告管理", "campaign"),
+    ("予算設定", "savings"),
+    ("全体設定", "settings"),
+]
+for col, (name, icon) in zip(nav_cols, SECTIONS):
+    with col:
+        is_active = st.session_state["section"] == name
+        btn_type = "primary" if is_active else "secondary"
+        if st.button(name, key=f"nav_{name}", use_container_width=True, type=btn_type):
+            if st.session_state["section"] != name:
+                st.session_state["section"] = name
+                st.rerun()
+
+st.write("")
+
+# ─── セクション別ルーティング ───
+section = st.session_state["section"]
+
+if section == "分析":
+    # 分析サブタブ
+    tab0, tab1, tab2, tab3 = st.tabs([
+        "全社一覧", "サマリー", "媒体別詳細", "レポート",
     ])
 
     PERIOD_MAP = {
@@ -430,8 +458,34 @@ else:
             st.session_state["period"] = period
         exec(open(str(ROOT / "2_platforms.py"), encoding="utf-8").read())
     with tab3:
-        exec(open(str(ROOT / "3_budget.py"), encoding="utf-8").read())
-    with tab4:
         exec(open(str(ROOT / "4_report.py"), encoding="utf-8").read())
-    with tab5:
+
+elif section == "広告管理":
+    # 広告管理サブタブ
+    tab_list, tab_new = st.tabs(["広告一覧", "新規入稿"])
+    with tab_list:
+        exec(open(str(ROOT / "7_ads_list.py"), encoding="utf-8").read())
+    with tab_new:
+        exec(open(str(ROOT / "6_submit.py"), encoding="utf-8").read())
+
+elif section == "予算設定":
+    # 予算設定サブタブ
+    tab_view, tab_edit = st.tabs(["予算状況", "予算設定"])
+    with tab_view:
+        exec(open(str(ROOT / "3_budget.py"), encoding="utf-8").read())
+    with tab_edit:
+        exec(open(str(ROOT / "8_budget_edit.py"), encoding="utf-8").read())
+
+elif section == "全体設定":
+    # 全体設定サブタブ
+    tab_clients, tab_api, tab_users, tab_notif = st.tabs([
+        "担当企業", "API連携", "ユーザー管理", "通知設定",
+    ])
+    with tab_clients:
         exec(open(str(ROOT / "5_settings.py"), encoding="utf-8").read())
+    with tab_api:
+        exec(open(str(ROOT / "9_api_settings.py"), encoding="utf-8").read())
+    with tab_users:
+        exec(open(str(ROOT / "10_users.py"), encoding="utf-8").read())
+    with tab_notif:
+        exec(open(str(ROOT / "11_notifications.py"), encoding="utf-8").read())

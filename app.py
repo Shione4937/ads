@@ -261,15 +261,19 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
 }}
 
 /* ===== クライアントセレクター（タブバー右端にオーバーレイ） ===== */
-/* セレクターを小さく、右に寄せる */
-[data-testid="stVerticalBlock"] > div:has(> div > div > .client-selector-anchor) + div {{
-    margin-bottom: -48px !important;
-    position: relative;
-    z-index: 5;
+/* st-keyクラスで確実に当てる */
+[data-testid="stVerticalBlock"] > div:has(> [data-testid="stHorizontalBlock"]:has(div.st-key-client_select_top)) {{
+    margin-bottom: -52px !important;
+    position: relative !important;
+    z-index: 5 !important;
 }}
-[data-testid="stVerticalBlock"] > div:has(> div > div > .client-selector-anchor) + div [data-testid="column"]:last-child [data-baseweb="select"] {{
+div.st-key-client_select_top {{
     max-width: 180px;
-    margin-left: auto;
+    margin-left: auto !important;
+}}
+div.st-key-client_select_top [data-baseweb="select"] > div {{
+    background: #ffffff !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
 }}
 
 /* ===== タブ（全幅） ===== */

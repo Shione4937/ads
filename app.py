@@ -105,9 +105,18 @@ header[data-testid="stHeader"] {{
     display: none !important;
 }}
 
+/* ===== 背景色 ===== */
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+.main,
+.stApp {{
+    background-color: #f4f7fa !important;
+}}
+
 .block-container {{
     padding-top: 1.2rem !important;
     padding-bottom: 1rem !important;
+    background-color: #f4f7fa !important;
 }}
 
 /* ===== ロゴ ===== */
@@ -147,29 +156,27 @@ header[data-testid="stHeader"] {{
     font-size: 16px !important;
     font-weight: 700 !important;
     border: 1px solid transparent !important;
-    background: transparent !important;
+    background-color: transparent !important;
     color: #6b7280 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
     line-height: 1 !important;
     box-shadow: none !important;
+    display: block !important;
 }}
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button > div,
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button p {{
-    display: inline !important;
     margin: 0 !important;
     font-size: 16px !important;
     font-weight: 700 !important;
-    line-height: 1 !important;
+    line-height: 60px !important;
+    text-align: left !important;
 }}
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button:hover {{
-    background: #f9fafb !important;
+    background-color: #f9fafb !important;
     color: #1e1b4b !important;
     border-color: #e5e7eb !important;
 }}
 [data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"] .stButton > button[kind="primary"] {{
-    background: {THEME["primary_light"]} !important;
+    background-color: {THEME["primary_light"]} !important;
     color: {THEME["primary_dark"]} !important;
     border: 1px solid {THEME["primary_light"]} !important;
 }}
@@ -202,7 +209,7 @@ header[data-testid="stHeader"] {{
 
 /* ===== メトリックカード ===== */
 [data-testid="stMetric"] {{
-    background: #ffffff;
+    background-color: #ffffff !important;
     border: 1px solid #e5e7eb;
     border-radius: 10px;
     padding: 14px 16px;
@@ -421,17 +428,26 @@ for idx, name in enumerate(SECTIONS):
     # idx=0 → 2番目のカラム（col_n1）, idx=1 → 3番目 ...
     col_nth = idx + 2
     nav_icon_css += f"""
-[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"]:nth-of-type({col_nth}) .stButton > button::before {{
-    content: '';
-    display: inline-block;
-    width: 38px;
-    height: 38px;
-    background-image: url('data:image/png;base64,{b64}');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-right: 10px;
-    flex-shrink: 0;
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"]:nth-of-type({col_nth}) .stButton > button {{
+    background-image: url('data:image/png;base64,{b64}') !important;
+    background-repeat: no-repeat !important;
+    background-position: 14px center !important;
+    background-size: 32px 32px !important;
+    padding-left: 58px !important;
+}}
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"]:nth-of-type({col_nth}) .stButton > button:hover {{
+    background-image: url('data:image/png;base64,{b64}'), none !important;
+    background-color: #f9fafb !important;
+    background-repeat: no-repeat !important;
+    background-position: 14px center !important;
+    background-size: 32px 32px !important;
+}}
+[data-testid="stVerticalBlock"] > div:has(> div > div > .topnav-marker) + div [data-testid="column"]:nth-of-type({col_nth}) .stButton > button[kind="primary"] {{
+    background-image: url('data:image/png;base64,{b64}') !important;
+    background-color: {THEME["primary_light"]} !important;
+    background-repeat: no-repeat !important;
+    background-position: 14px center !important;
+    background-size: 32px 32px !important;
 }}
 """
 

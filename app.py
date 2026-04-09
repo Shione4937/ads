@@ -118,7 +118,7 @@ header[data-testid="stHeader"] {{
 }}
 
 .block-container {{
-    padding-top: 1.2rem !important;
+    padding-top: 0.3rem !important;
     padding-bottom: 1rem !important;
     background: transparent !important;
 }}
@@ -132,7 +132,7 @@ header[data-testid="stHeader"] {{
 /* ===== ロゴ（Ad紫+Board青） ===== */
 .adboard-logo-wrap {{
     display: inline-block;
-    padding: 6px 0 0 0;
+    padding: 0;
 }}
 .adboard-logo-text {{
     font-size: 40px;
@@ -223,10 +223,13 @@ html body .stApp div.st-key-nav_analytics button[kind="primary"],
 html body .stApp div.st-key-nav_campaign button[kind="primary"],
 html body .stApp div.st-key-nav_budget button[kind="primary"],
 html body .stApp div.st-key-nav_settings button[kind="primary"] {{
-    color: {THEME["primary"]} !important;
+    color: #94a3b8 !important;
     background-color: transparent !important;
     border: 0 !important;
+    border-bottom: 3px solid {THEME["primary"]} !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
+    padding-bottom: 4px !important;
 }}
 /* ナビ内のアイコン画像を縦中央揃え・小さめに */
 [data-testid="column"] [data-testid="column"] [data-testid="stImage"] {{

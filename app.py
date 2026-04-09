@@ -510,6 +510,23 @@ NAV_KEYS = {
     "全体設定": "nav_settings",
 }
 
+# ナビボタン用に各アイコンをbase64化してCSSのbackground-imageに埋め込む
+nav_bg_css = ""
+for name, b64_key in [("分析", "nav_analytics"), ("広告管理", "nav_campaign"),
+                      ("予算設定", "nav_budget"), ("全体設定", "nav_settings")]:
+    b64 = ICONS_B64.get(name, "")
+    if b64:
+        nav_bg_css += f"""
+html body .stApp div.st-key-{b64_key} button {{
+    background-image: url('data:image/png;base64,{b64}') !important;
+    background-repeat: no-repeat !important;
+    background-position: 0 center !important;
+    background-size: 28px 28px !important;
+    padding-left: 38px !important;
+}}
+"""
+st.markdown(f"<style>{nav_bg_css}</style>", unsafe_allow_html=True)
+
 # ロゴ + 4ナビ + クライアント を1行に
 col_logo, col_n1, col_n2, col_n3, col_n4, col_client = st.columns([2.2, 1.5, 1.7, 1.7, 1.7, 1.4])
 
@@ -523,7 +540,7 @@ with col_logo:
     </div>
     """, unsafe_allow_html=True)
 
-# 各ナビカラム：アイコン画像 + ボタンを縦配置
+# 各ナビボタン（アイコンは背景画像としてボタンに埋め込み）
 nav_data = [
     (col_n1, "分析"),
     (col_n2, "広告管理"),
@@ -532,19 +549,12 @@ nav_data = [
 ]
 for col, name in nav_data:
     with col:
-        # サブカラムでアイコン（左）+ ボタン（右）を横並び
-        sub_img, sub_btn = st.columns([1, 3], gap="small")
-        with sub_img:
-            icon_path = ROOT / "assets" / "icons" / ICON_FILES[name]
-            if icon_path.exists():
-                st.image(str(icon_path), width=30)
-        with sub_btn:
-            is_active = st.session_state["section"] == name
-            btn_type = "primary" if is_active else "secondary"
-            if st.button(name, key=NAV_KEYS[name], use_container_width=True, type=btn_type):
-                if st.session_state["section"] != name:
-                    st.session_state["section"] = name
-                    st.rerun()
+        is_active = st.session_state["section"] == name
+        btn_type = "primary" if is_active else "secondary"
+        if st.button(name, key=NAV_KEYS[name], use_container_width=True, type=btn_type):
+            if st.session_state["section"] != name:
+                st.session_state["section"] = name
+                st.rerun()
 
 with col_client:
     st.write("")

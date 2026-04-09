@@ -184,9 +184,7 @@ html body .stApp div.st-key-nav_settings button {{
     margin: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
-    background: transparent !important;
     background-color: transparent !important;
-    background-image: none !important;
     color: #94a3b8 !important;
     font-size: 14px !important;
     font-weight: 700 !important;
@@ -202,7 +200,6 @@ html body .stApp div.st-key-nav_campaign button:hover,
 html body .stApp div.st-key-nav_budget button:hover,
 html body .stApp div.st-key-nav_settings button:hover {{
     color: #475569 !important;
-    background: transparent !important;
     background-color: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
@@ -215,7 +212,6 @@ html body .stApp div.st-key-nav_analytics button:active,
 html body .stApp div.st-key-nav_campaign button:active,
 html body .stApp div.st-key-nav_budget button:active,
 html body .stApp div.st-key-nav_settings button:active {{
-    background: transparent !important;
     background-color: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
@@ -226,9 +222,7 @@ html body .stApp div.st-key-nav_campaign button[kind="primary"],
 html body .stApp div.st-key-nav_budget button[kind="primary"],
 html body .stApp div.st-key-nav_settings button[kind="primary"] {{
     color: #1e1b4b !important;
-    background: transparent !important;
     background-color: transparent !important;
-    background-image: none !important;
     border: 0 !important;
     box-shadow: none !important;
 }}
@@ -517,12 +511,20 @@ for name, b64_key in [("分析", "nav_analytics"), ("広告管理", "nav_campaig
     b64 = ICONS_B64.get(name, "")
     if b64:
         nav_bg_css += f"""
-html body .stApp div.st-key-{b64_key} button {{
+html body .stApp div.st-key-{b64_key} button,
+html body .stApp div.st-key-{b64_key} button[kind="primary"],
+html body .stApp div.st-key-{b64_key} button[kind="secondary"] {{
     background-image: url('data:image/png;base64,{b64}') !important;
     background-repeat: no-repeat !important;
     background-position: 0 center !important;
     background-size: 28px 28px !important;
     padding-left: 38px !important;
+}}
+html body .stApp div.st-key-{b64_key} button > div,
+html body .stApp div.st-key-{b64_key} button p {{
+    text-align: left !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }}
 """
 st.markdown(f"<style>{nav_bg_css}</style>", unsafe_allow_html=True)

@@ -108,7 +108,7 @@ header[data-testid="stHeader"] {{
 /* ===== 背景色（全幅2層：上=白 / 下=グレー） ===== */
 /* ブラウザ全幅で上は白、下は #f4f7fa を出すために linear-gradient を使用 */
 .stApp {{
-    background: linear-gradient(to bottom, #ffffff 0px, #ffffff 90px, #f4f7fa 90px, #f4f7fa 100%) !important;
+    background: linear-gradient(to bottom, #ffffff 0px, #ffffff 130px, #f4f7fa 130px, #f4f7fa 100%) !important;
     background-attachment: fixed !important;
 }}
 [data-testid="stAppViewContainer"],
@@ -261,6 +261,9 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
 }}
 
 /* ===== タブ（全幅） ===== */
+[data-testid="stTabs"] {{
+    margin-top: 0 !important;
+}}
 [data-testid="stTabs"] [data-baseweb="tab-list"] {{
     background: {THEME["gradient_soft"]};
     border-radius: 0;
@@ -275,6 +278,7 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
     right: 50%;
     margin-left: -50vw;
     margin-right: -50vw;
+    margin-top: 0 !important;
 }}
 [data-testid="stTabs"] [data-baseweb="tab"] {{
     border-radius: 8px;
@@ -581,15 +585,12 @@ for col, name in nav_data:
                 st.rerun()
 
 with col_client:
-    st.write("")
     selected_client = st.selectbox(
         "クライアント選択", get_clients(),
         index=get_clients().index(st.session_state["client"]),
         label_visibility="collapsed"
     )
     st.session_state["client"] = selected_client
-
-st.write("")
 
 # ─── セクション別ルーティング ───
 section = st.session_state["section"]

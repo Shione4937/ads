@@ -168,6 +168,11 @@ header[data-testid="stHeader"] {{
 }}
 
 /* ===== トップナビゲーション ===== */
+/* ナビのネストされたカラムのgapを削除（アイコンと文字を近く） */
+[data-testid="column"] > div > [data-testid="stHorizontalBlock"] {{
+    gap: 0.5rem !important;
+}}
+
 /* 最大specificityで既存スタイルを強制上書き */
 html body .stApp div.st-key-nav_analytics button,
 html body .stApp div.st-key-nav_campaign button,
@@ -176,6 +181,7 @@ html body .stApp div.st-key-nav_settings button {{
     min-height: 44px !important;
     height: 44px !important;
     padding: 0 !important;
+    margin: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
     background: transparent !important;
@@ -187,6 +193,9 @@ html body .stApp div.st-key-nav_settings button {{
     box-shadow: none !important;
     text-align: left !important;
     outline: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
 }}
 html body .stApp div.st-key-nav_analytics button:hover,
 html body .stApp div.st-key-nav_campaign button:hover,
@@ -227,21 +236,38 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
 [data-testid="column"] [data-testid="column"] [data-testid="stImage"] {{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     height: 44px;
+    margin: 0 !important;
+    padding: 0 !important;
+}}
+[data-testid="column"] [data-testid="column"] [data-testid="stImage"] > div {{
+    height: 44px;
+    display: flex;
+    align-items: center;
 }}
 [data-testid="column"] [data-testid="column"] [data-testid="stImage"] img {{
-    max-width: 32px !important;
-    height: auto !important;
+    width: 30px !important;
+    height: 30px !important;
+    max-width: 30px !important;
+    object-fit: contain;
 }}
 
-/* ===== タブ ===== */
+/* ===== タブ（全幅） ===== */
 [data-testid="stTabs"] [data-baseweb="tab-list"] {{
     background: {THEME["gradient_soft"]};
-    border-radius: 10px;
-    padding: 4px 5px;
+    border-radius: 0;
+    padding: 6px max(calc(50vw - 50% - 10px), 1rem);
     gap: 3px;
-    border: 1px solid {THEME["shadow_light"]};
+    border: none;
+    border-top: 1px solid {THEME["shadow_light"]};
+    border-bottom: 1px solid {THEME["shadow_light"]};
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
 }}
 [data-testid="stTabs"] [data-baseweb="tab"] {{
     border-radius: 8px;
@@ -507,11 +533,11 @@ nav_data = [
 for col, name in nav_data:
     with col:
         # サブカラムでアイコン（左）+ ボタン（右）を横並び
-        sub_img, sub_btn = st.columns([1, 2.2])
+        sub_img, sub_btn = st.columns([1, 3], gap="small")
         with sub_img:
             icon_path = ROOT / "assets" / "icons" / ICON_FILES[name]
             if icon_path.exists():
-                st.image(str(icon_path), width=32)
+                st.image(str(icon_path), width=30)
         with sub_btn:
             is_active = st.session_state["section"] == name
             btn_type = "primary" if is_active else "secondary"

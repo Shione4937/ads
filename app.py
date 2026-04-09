@@ -108,7 +108,7 @@ header[data-testid="stHeader"] {{
 /* ===== 背景色（全幅2層：上=白 / 下=グレー） ===== */
 /* ブラウザ全幅で上は白、下は #f4f7fa を出すために linear-gradient を使用 */
 .stApp {{
-    background: linear-gradient(to bottom, #ffffff 0px, #ffffff 130px, #f4f7fa 130px, #f4f7fa 100%) !important;
+    background: linear-gradient(to bottom, #ffffff 0px, #ffffff 90px, #f4f7fa 90px, #f4f7fa 100%) !important;
     background-attachment: fixed !important;
 }}
 [data-testid="stAppViewContainer"],
@@ -144,9 +144,9 @@ header[data-testid="stHeader"] {{
     padding: 0;
 }}
 .adboard-logo-text {{
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 900;
-    letter-spacing: -1.5px;
+    letter-spacing: -1px;
     line-height: 1;
     font-family: 'Inter', sans-serif;
 }}
@@ -160,8 +160,8 @@ header[data-testid="stHeader"] {{
 }}
 .adboard-sub-big {{
     color: #9ca3af;
-    font-size: 11px;
-    margin-top: 6px;
+    font-size: 10px;
+    margin-top: 4px;
     letter-spacing: 0.2px;
 }}
 
@@ -233,10 +233,11 @@ html body .stApp div.st-key-nav_campaign button[kind="primary"],
 html body .stApp div.st-key-nav_budget button[kind="primary"],
 html body .stApp div.st-key-nav_settings button[kind="primary"] {{
     color: #475569 !important;
-    background-color: {THEME["primary_light"]} !important;
+    background-color: transparent !important;
     border: 0 !important;
-    border-radius: 22px !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
+    padding-bottom: 6px !important;
 }}
 /* ナビ内のアイコン画像を縦中央揃え・小さめに */
 [data-testid="column"] [data-testid="column"] [data-testid="stImage"] {{
@@ -529,15 +530,17 @@ html body .stApp div.st-key-{b64_key} button {{
     background-position: 8px center !important;
     background-size: 24px 24px !important;
     padding-left: 38px !important;
-    padding-right: 14px !important;
+    padding-right: 10px !important;
 }}
 html body .stApp div.st-key-{b64_key} button[kind="primary"] {{
-    background-image: url('data:image/png;base64,{b64}') !important;
-    background-repeat: no-repeat !important;
-    background-position: 8px center !important;
-    background-size: 24px 24px !important;
+    background-image:
+        url('data:image/png;base64,{b64}'),
+        linear-gradient(90deg, #06b6d4 0%, #6366f1 50%, #c026d3 100%) !important;
+    background-repeat: no-repeat, no-repeat !important;
+    background-position: 8px center, 0 100% !important;
+    background-size: 24px 24px, 100% 3px !important;
     padding-left: 38px !important;
-    padding-right: 14px !important;
+    padding-right: 10px !important;
 }}
 html body .stApp div.st-key-{b64_key} button > div,
 html body .stApp div.st-key-{b64_key} button p {{

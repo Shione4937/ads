@@ -108,7 +108,7 @@ header[data-testid="stHeader"] {{
 /* ===== 背景色（全幅2層：上=白 / 下=グレー） ===== */
 /* ブラウザ全幅で上は白、下は #f4f7fa を出すために linear-gradient を使用 */
 .stApp {{
-    background: linear-gradient(to bottom, #ffffff 0px, #ffffff 180px, #f4f7fa 180px, #f4f7fa 100%) !important;
+    background: linear-gradient(to bottom, #ffffff 0px, #ffffff 130px, #f4f7fa 130px, #f4f7fa 100%) !important;
     background-attachment: fixed !important;
 }}
 [data-testid="stAppViewContainer"],
@@ -167,67 +167,72 @@ header[data-testid="stHeader"] {{
     justify-content: center;
 }}
 
-/* ===== トップナビゲーション（st-key-* クラスで確実に狙う） ===== */
-.st-key-nav_analytics .stButton > button,
-.st-key-nav_campaign .stButton > button,
-.st-key-nav_budget .stButton > button,
-.st-key-nav_settings .stButton > button,
-.st-key-nav_analytics button,
-.st-key-nav_campaign button,
-.st-key-nav_budget button,
-.st-key-nav_settings button {{
-    min-height: 60px !important;
-    height: 60px !important;
+/* ===== トップナビゲーション ===== */
+/* 最大specificityで既存スタイルを強制上書き */
+html body .stApp div.st-key-nav_analytics button,
+html body .stApp div.st-key-nav_campaign button,
+html body .stApp div.st-key-nav_budget button,
+html body .stApp div.st-key-nav_settings button {{
+    min-height: 44px !important;
+    height: 44px !important;
     padding: 0 !important;
-    border: none !important;
+    border: 0 !important;
     border-radius: 0 !important;
     background: transparent !important;
     background-color: transparent !important;
     background-image: none !important;
     color: #94a3b8 !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
     box-shadow: none !important;
     text-align: left !important;
+    outline: none !important;
 }}
-.st-key-nav_analytics button:hover,
-.st-key-nav_campaign button:hover,
-.st-key-nav_budget button:hover,
-.st-key-nav_settings button:hover {{
+html body .stApp div.st-key-nav_analytics button:hover,
+html body .stApp div.st-key-nav_campaign button:hover,
+html body .stApp div.st-key-nav_budget button:hover,
+html body .stApp div.st-key-nav_settings button:hover {{
     color: #475569 !important;
     background: transparent !important;
-    border: none !important;
+    background-color: transparent !important;
+    border: 0 !important;
     box-shadow: none !important;
 }}
-.st-key-nav_analytics button:focus,
-.st-key-nav_campaign button:focus,
-.st-key-nav_budget button:focus,
-.st-key-nav_settings button:focus,
-.st-key-nav_analytics button:active,
-.st-key-nav_campaign button:active,
-.st-key-nav_budget button:active,
-.st-key-nav_settings button:active {{
+html body .stApp div.st-key-nav_analytics button:focus,
+html body .stApp div.st-key-nav_campaign button:focus,
+html body .stApp div.st-key-nav_budget button:focus,
+html body .stApp div.st-key-nav_settings button:focus,
+html body .stApp div.st-key-nav_analytics button:active,
+html body .stApp div.st-key-nav_campaign button:active,
+html body .stApp div.st-key-nav_budget button:active,
+html body .stApp div.st-key-nav_settings button:active {{
     background: transparent !important;
-    border: none !important;
+    background-color: transparent !important;
+    border: 0 !important;
     box-shadow: none !important;
     outline: none !important;
 }}
-.st-key-nav_analytics button[kind="primary"],
-.st-key-nav_campaign button[kind="primary"],
-.st-key-nav_budget button[kind="primary"],
-.st-key-nav_settings button[kind="primary"] {{
+html body .stApp div.st-key-nav_analytics button[kind="primary"],
+html body .stApp div.st-key-nav_campaign button[kind="primary"],
+html body .stApp div.st-key-nav_budget button[kind="primary"],
+html body .stApp div.st-key-nav_settings button[kind="primary"] {{
     color: #1e1b4b !important;
     background: transparent !important;
     background-color: transparent !important;
-    border: none !important;
+    background-image: none !important;
+    border: 0 !important;
     box-shadow: none !important;
 }}
-/* ナビ内のアイコン画像を縦中央揃え */
+/* ナビ内のアイコン画像を縦中央揃え・小さめに */
 [data-testid="column"] [data-testid="column"] [data-testid="stImage"] {{
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60px;
+    height: 44px;
+}}
+[data-testid="column"] [data-testid="column"] [data-testid="stImage"] img {{
+    max-width: 32px !important;
+    height: auto !important;
 }}
 
 /* ===== タブ ===== */
@@ -506,7 +511,7 @@ for col, name in nav_data:
         with sub_img:
             icon_path = ROOT / "assets" / "icons" / ICON_FILES[name]
             if icon_path.exists():
-                st.image(str(icon_path), width=48)
+                st.image(str(icon_path), width=32)
         with sub_btn:
             is_active = st.session_state["section"] == name
             btn_type = "primary" if is_active else "secondary"

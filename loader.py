@@ -108,6 +108,62 @@ def get_budget_progress(client):
     return pd.DataFrame(rows)
 
 
+def get_calendar_html(today=None):
+    """当月カレンダーHTML（今日ハイライト+残日数）を生成"""
+    if today is None:
+        today = TODAY
+    year, month = today.year, today.month
+    days_in_month = calendar.monthrange(year, month)[1]
+    first_weekday = date(year, month, 1).weekday()  # 0=月
+    elapsed = today.day
+    remaining = days_in_month - elapsed
+    progress = round(elapsed / days_in_month * 100, 1)
+
+    month_names = {1:"1月",2:"2月",3:"3月",4:"4月",5:"5月",6:"6月",
+                   7:"7月",8:"8月",9:"9月",10:"10月",11:"11月",12:"12月"}
+
+    html = f'''
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;">
+        <div style="text-align:center;font-weight:700;color:#1e1b4b;font-size:14px;margin-bottom:10px;">
+            {year}年 {month_names[month]}
+        </div>
+        <table style="width:100%;text-align:center;font-size:12px;border-collapse:collapse;">
+        <tr>'''
+    for wd in ["月","火","水","木","金","土","日"]:
+        color = "#dc2626" if wd == "日" else "#3b82f6" if wd == "土" else "#6b7280"
+        html += f'<th style="color:{color};font-weight:600;padding:2px;">{wd}</th>'
+    html += '</tr><tr>'
+
+    for blank in range(first_weekday):
+        html += '<td></td>'
+
+    for d in range(1, days_in_month + 1):
+        wd = (first_weekday + d - 1) % 7
+        is_today = d == today.day
+        past = d < today.day
+
+        if is_today:
+            style = "background:#6366f1;color:#fff;border-radius:50%;font-weight:700;"
+        elif past:
+            style = "color:#1e1b4b;"
+        else:
+            style = "color:#94a3b8;"
+
+        html += f'<td style="padding:3px;"><div style="{style}width:26px;height:26px;line-height:26px;margin:auto;font-size:11px;">{d}</div></td>'
+
+        if wd == 6 and d < days_in_month:
+            html += '</tr><tr>'
+
+    html += f'''</tr></table>
+        <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:#6b7280;">
+            <span>経過 <strong style="color:#1e1b4b;">{elapsed}日</strong></span>
+            <span>残 <strong style="color:#1e1b4b;">{remaining}日</strong></span>
+            <span>進捗 <strong style="color:#6366f1;">{progress}%</strong></span>
+        </div>
+    </div>'''
+    return html
+
+
 def get_monthly_trend(df):
     df = df.copy()
     df["month"] = pd.to_datetime(df["date"]).dt.to_period("M").astype(str)

@@ -3,7 +3,7 @@ from pathlib import Path
 import sys
 import base64
 sys.path.insert(0, str(Path(__file__).parent))
-from loader import get_clients, ALL_CLIENTS, DEFAULT_SELECTED
+from loader import get_clients, ALL_CLIENTS, DEFAULT_SELECTED, get_calendar_html
 
 st.set_page_config(page_title="AdBoard", layout="wide")
 
@@ -604,88 +604,84 @@ for col, name in nav_data:
 # ─── セクション別ルーティング ───
 section = st.session_state["section"]
 
-def render_client_selector():
-    """タブ直上にクライアント選択をコンパクトに右寄せ配置"""
-    selected_client = st.selectbox(
-        "クライアント選択", get_clients(),
-        index=get_clients().index(st.session_state["client"]),
-        label_visibility="collapsed",
-        key="client_select_top",
-    )
-    st.session_state["client"] = selected_client
-    # CSS をセレクトボックス直後に inject（確実に適用される）
-    st.markdown("""
-    <style>
-    div.st-key-client_select_top {
-        max-width: 160px !important;
-        margin-left: auto !important;
-        margin-top: -8px !important;
-        margin-bottom: -8px !important;
-    }
-    div.st-key-client_select_top [data-baseweb="select"] > div {
-        background: #ffffff !important;
-        border: 1px solid #e5e7eb !important;
-        font-size: 13px !important;
-        min-height: 32px !important;
-        height: 32px !important;
-        border-radius: 8px !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+def render_client_row(key, show_period=False, show_calendar=False):
+    """タブ内の先頭行にクライアント選択（+ 期間選択 + カレンダー）を配置"""
+    if show_period and show_calendar:
+        col_period, _, col_cal, col_client = st.columns([2, 3, 2.5, 2.5])
+    elif show_period:
+        col_period, _, col_client = st.columns([2, 6, 2])
+        col_cal = None
+    elif show_calendar:
+        _, col_cal, col_client = st.columns([5, 2.5, 2.5])
+        col_period = None
+    else:
+        _, col_client = st.columns([8, 2])
+        col_period = None
+        col_cal = None
+
+    if col_period and show_period:
+        with col_period:
+            period = st.selectbox("期間", list(PERIOD_MAP.keys()),
+                                  index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
+                                  key=f"period_{key}")
+            st.session_state["period"] = period
+    if col_cal and show_calendar:
+        with col_cal:
+            st.markdown(get_calendar_html(), unsafe_allow_html=True)
+    with col_client:
+        selected = st.selectbox("クライアント", get_clients(),
+                                index=get_clients().index(st.session_state["client"]),
+                                label_visibility="collapsed", key=f"client_{key}")
+        st.session_state["client"] = selected
+
+PERIOD_MAP = {
+    "今月（4月）":   ("2026-04-01","2026-04-14"),
+    "先月（3月）":   ("2026-03-01","2026-03-31"),
+    "Q1（1〜3月）": ("2026-01-01","2026-03-31"),
+    "直近3ヶ月":    ("2026-01-14","2026-04-14"),
+    "直近12ヶ月":   ("2025-04-14","2026-04-14"),
+}
 
 if section == "分析":
-    render_client_selector()
     tab0, tab1, tab2, tab3, tab4 = st.tabs([
         "全社一覧", "サマリー", "媒体別詳細", "レポート", "AI分析",
     ])
 
-    PERIOD_MAP = {
-        "今月（4月）":   ("2026-04-01","2026-04-14"),
-        "先月（3月）":   ("2026-03-01","2026-03-31"),
-        "Q1（1〜3月）": ("2026-01-01","2026-03-31"),
-        "直近3ヶ月":    ("2026-01-14","2026-04-14"),
-        "直近12ヶ月":   ("2025-04-14","2026-04-14"),
-    }
-
     with tab0:
+        render_client_row("overview")
         exec(open(str(ROOT / "0_overview.py"), encoding="utf-8").read())
     with tab1:
-        col_period, _ = st.columns([2, 8])
-        with col_period:
-            period = st.selectbox("期間", list(PERIOD_MAP.keys()),
-                                  index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
-                                  key="period_summary")
-            st.session_state["period"] = period
+        render_client_row("summary", show_period=True, show_calendar=True)
         exec(open(str(ROOT / "1_summary.py"), encoding="utf-8").read())
     with tab2:
-        col_period2, _ = st.columns([2, 8])
-        with col_period2:
-            period = st.selectbox("期間", list(PERIOD_MAP.keys()),
-                                  index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
-                                  key="period_platforms")
-            st.session_state["period"] = period
+        render_client_row("platforms", show_period=True)
         exec(open(str(ROOT / "2_platforms.py"), encoding="utf-8").read())
     with tab3:
+        render_client_row("report")
         exec(open(str(ROOT / "4_report.py"), encoding="utf-8").read())
     with tab4:
+        render_client_row("ai")
         exec(open(str(ROOT / "12_ai_analysis.py"), encoding="utf-8").read())
 
 elif section == "広告管理":
-    render_client_selector()
     tab_list, tab_new, tab_ai = st.tabs(["広告一覧", "新規入稿", "おすすめ広告設定"])
     with tab_list:
+        render_client_row("ads_list")
         exec(open(str(ROOT / "7_ads_list.py"), encoding="utf-8").read())
     with tab_new:
+        render_client_row("submit")
         exec(open(str(ROOT / "6_submit.py"), encoding="utf-8").read())
     with tab_ai:
+        render_client_row("ai_rec")
         exec(open(str(ROOT / "13_ai_recommend.py"), encoding="utf-8").read())
 
 elif section == "予算設定":
-    render_client_selector()
     tab_view, tab_edit = st.tabs(["予算状況", "予算設定"])
     with tab_view:
+        render_client_row("budget_view")
         exec(open(str(ROOT / "3_budget.py"), encoding="utf-8").read())
     with tab_edit:
+        render_client_row("budget_edit")
         exec(open(str(ROOT / "8_budget_edit.py"), encoding="utf-8").read())
 
 elif section == "全体設定":

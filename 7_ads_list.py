@@ -61,10 +61,10 @@ if not ads:
         """, unsafe_allow_html=True)
 else:
     PLATFORM_COLORS = {
-        "google": "#6366f1",
-        "yahoo":  "#8b5cf6",
-        "meta":   "#0ea5e9",
-        "tiktok": "#a78bfa",
+        "google": "#4684ec",
+        "yahoo":  "#ff0132",
+        "meta":   "#0b76ed",
+        "tiktok": "#4fe5e2",
     }
     STATUS_STYLES = {
         "配信中":   {"bg": "#d1fae5", "color": "#059669"},

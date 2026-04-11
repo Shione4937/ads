@@ -24,7 +24,7 @@ df = load_demo(client=client, date_from=d_from, date_to=d_to)
 summary = get_summary(df)
 
 # 新カラーパレット（紫〜ブルーグラデーション系）
-COLORS = {"google":"#6366f1","yahoo":"#8b5cf6","meta":"#38bdf8","tiktok":"#a78bfa"}
+COLORS = {"google":"#4684ec","yahoo":"#ff0132","meta":"#0b76ed","tiktok":"#4fe5e2"}
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
 
 st.markdown(f"#### サマリー — {client}")

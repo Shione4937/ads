@@ -8,28 +8,28 @@ st.write("")
 api_items = [
     {
         "name": "Google Ads",
-        "color": "#6366f1",
+        "color": "#4684ec",
         "status": "未連携",
         "note": "Developer Token + OAuth2 申請が必要",
         "url": "https://developers.google.com/google-ads/api/docs/first-call/overview",
     },
     {
         "name": "Yahoo!広告",
-        "color": "#8b5cf6",
+        "color": "#ff0132",
         "status": "未連携",
         "note": "Yahoo! JAPAN Developers Network で申請",
         "url": "https://ads-developers.yahoo.co.jp/",
     },
     {
         "name": "Meta 広告",
-        "color": "#0ea5e9",
+        "color": "#0b76ed",
         "status": "未連携",
         "note": "Meta for Developers で Marketing API 申請",
         "url": "https://developers.facebook.com/docs/marketing-apis",
     },
     {
         "name": "TikTok広告",
-        "color": "#a78bfa",
+        "color": "#4fe5e2",
         "status": "未連携",
         "note": "TikTok for Business API 申請",
         "url": "https://business-api.tiktok.com/",

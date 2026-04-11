@@ -168,7 +168,7 @@ def get_calendar_html(year=None, month=None, today=None):
         html += f'''
         <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:#6b7280;">
             <span>経過 <strong style="color:#1e1b4b;">{elapsed}日</strong></span>
-            <span>残 <strong style="color:#1e1b4b;">{remaining}日</strong></span>
+            <span>残 <strong style="color:#1e1b4b;">{remaining}日</strong><span style="font-size:9px;color:#9ca3af;">（今日含む）</span></span>
             <span>進捗 <strong style="color:#6366f1;">{progress}%</strong></span>
         </div>'''
     html += '</div>'

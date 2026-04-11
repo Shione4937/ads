@@ -17,7 +17,7 @@ PERIOD_MAP = {
 d_from, d_to = PERIOD_MAP.get(period, ("2026-04-01","2026-04-14"))
 
 # カラーパレット（紫〜ブルー系）
-COLORS = {"google":"#6366f1","yahoo":"#8b5cf6","meta":"#38bdf8","tiktok":"#a78bfa"}
+COLORS = {"google":"#4684ec","yahoo":"#ff0132","meta":"#0b76ed","tiktok":"#4fe5e2"}
 PNAMES = {"google":"Google Ads","yahoo":"Yahoo!広告","meta":"Meta広告","tiktok":"TikTok広告"}
 st.markdown(f"#### 媒体別詳細 — {client}")
 st.caption(f"{d_from} 〜 {d_to}")

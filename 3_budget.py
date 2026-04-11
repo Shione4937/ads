@@ -7,7 +7,7 @@ from loader import get_budget_progress, TODAY
 
 client = st.session_state.get("client", "A社")
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
-COLORS = {"google":"#6366f1","yahoo":"#8b5cf6","meta":"#38bdf8","tiktok":"#a78bfa"}
+COLORS = {"google":"#4684ec","yahoo":"#ff0132","meta":"#0b76ed","tiktok":"#4fe5e2"}
 
 st.markdown(f"#### 予算管理 — {client}")
 st.caption(f"基準日：{TODAY}（4月14日）")

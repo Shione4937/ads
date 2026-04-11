@@ -610,14 +610,11 @@ def render_client_row(key, show_period=False):
 
     with col_cal_btn:
         with st.popover("カレンダー", use_container_width=True):
-            st.markdown(get_calendar_html(), unsafe_allow_html=True)
-            st.divider()
-            st.markdown("**表示期間**")
-            period = st.radio("期間", list(PERIOD_MAP.keys()),
-                              index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
-                              key=f"period_{key}",
-                              label_visibility="collapsed")
+            period = st.selectbox("表示期間", list(PERIOD_MAP.keys()),
+                                  index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
+                                  key=f"period_{key}")
             st.session_state["period"] = period
+            st.markdown(get_calendar_html(), unsafe_allow_html=True)
 
     with col_client:
         selected = st.selectbox("クライアント", get_clients(),

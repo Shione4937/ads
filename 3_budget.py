@@ -7,7 +7,7 @@ from loader import get_budget_progress, TODAY
 
 client = st.session_state.get("client", "A社")
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
-COLORS = {"google":"#4684ec","yahoo":"#ff0132","meta":"#0b76ed","tiktok":"#4fe5e2"}
+COLORS = {"google":"#3b82f6","yahoo":"#60a5fa","meta":"#93c5fd","tiktok":"#bfdbfe"}
 
 st.markdown(f"#### 予算管理 — {client}")
 st.caption(f"基準日：{TODAY}（4月14日）")
@@ -87,9 +87,9 @@ for d in range(1, days_elapsed+1):
 
 fig = go.Figure()
 fig.add_scatter(x=list(range(1, days_elapsed+1)), y=ideal_daily,
-                name="理想ペース", line=dict(color="#c4b5fd", dash="dash", width=2))
+                name="理想ペース", line=dict(color="#bfdbfe", dash="dash", width=2))
 fig.add_scatter(x=list(range(1, days_elapsed+1)), y=actual_cumulative,
-                name="実績", line=dict(color="#7c6bf6", width=2.5),
+                name="実績", line=dict(color="#3b82f6", width=2.5),
                 fill="tozeroy", fillcolor="rgba(124,107,246,0.08)")
 fig.update_layout(
     height=280, margin=dict(t=20,b=20,l=10,r=10),

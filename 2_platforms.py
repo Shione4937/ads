@@ -16,28 +16,33 @@ PERIOD_MAP = {
 }
 d_from, d_to = PERIOD_MAP.get(period, ("2026-04-01","2026-04-14"))
 
-# カラーパレット（ブランドカラー）
-COLORS = {"google":"#4684ec","yahoo":"#ff0132","meta":"#0b76ed","tiktok":"#4fe5e2"}
+# カラーパレット（グラフは青系で統一）
+COLORS = {"google":"#60a5fa","yahoo":"#60a5fa","meta":"#60a5fa","tiktok":"#60a5fa"}
 PNAMES = {"google":"Google Ads","yahoo":"Yahoo!広告","meta":"Meta広告","tiktok":"TikTok広告"}
 
-# 媒体タブにブランドカラーを適用
+# 媒体タブにブランドカラーを適用（本家準拠）
 st.markdown("""
 <style>
+/* Google: 青メイン + 赤黄緑アクセント（ロゴの比率に準拠） */
 [role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(1)[aria-selected="true"] {
-    background: linear-gradient(135deg, #4684ec, #34a451) !important;
+    background: linear-gradient(90deg, #4285F4 0%, #4285F4 55%, #EA4335 55%, #EA4335 70%, #FBBC05 70%, #FBBC05 85%, #34A853 85%, #34A853 100%) !important;
     color: #fff !important;
 }
+/* Yahoo: 赤 */
 [role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(2)[aria-selected="true"] {
     background: #ff0132 !important;
     color: #fff !important;
 }
+/* Meta: 青 */
 [role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(3)[aria-selected="true"] {
     background: #0b76ed !important;
     color: #fff !important;
 }
+/* TikTok: 黒 + ネオンシアン/ピンクの縁 */
 [role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(4)[aria-selected="true"] {
-    background: linear-gradient(135deg, #4fe5e2, #e62b58) !important;
+    background: #000000 !important;
     color: #fff !important;
+    box-shadow: -2px 0 0 #69C9D0, 2px 0 0 #EE1D52, 0 2px 8px rgba(0,0,0,0.3) !important;
 }
 [role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab-highlight"] {
     display: none !important;

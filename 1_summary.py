@@ -23,8 +23,8 @@ d_from, d_to = PERIOD_MAP.get(period, ("2026-04-01","2026-04-14"))
 df = load_demo(client=client, date_from=d_from, date_to=d_to)
 summary = get_summary(df)
 
-# 新カラーパレット（紫〜ブルーグラデーション系）
-COLORS = {"google":"#4684ec","yahoo":"#ff0132","meta":"#0b76ed","tiktok":"#4fe5e2"}
+# グラフカラー（青系で統一・Shirofune風）
+COLORS = {"google":"#3b82f6","yahoo":"#60a5fa","meta":"#93c5fd","tiktok":"#bfdbfe"}
 PNAMES = {"google":"Google","yahoo":"Yahoo","meta":"Meta","tiktok":"TikTok"}
 
 st.markdown(f"#### サマリー — {client}")
@@ -97,10 +97,10 @@ trend_df = load_demo(client=client, date_from="2025-04-01", date_to="2026-04-14"
 trend = get_monthly_trend(trend_df)
 fig2 = go.Figure()
 fig2.add_bar(x=trend["month"], y=trend["cost"], name="費用",
-             marker_color="#7c6bf6", opacity=0.85,
+             marker_color="#60a5fa", opacity=0.85,
              marker_line=dict(width=0))
 fig2.add_scatter(x=trend["month"], y=trend["cv"]*1000, name="CV×1000",
-                 mode="lines+markers", line=dict(color="#38bdf8", width=2.5),
+                 mode="lines+markers", line=dict(color="#93c5fd", width=2.5),
                  marker=dict(size=6),
                  yaxis="y2")
 fig2.update_layout(

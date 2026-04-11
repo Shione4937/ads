@@ -606,28 +606,22 @@ section = st.session_state["section"]
 
 def render_client_row(key, show_period=False, show_calendar=False):
     """タブ内の先頭行にクライアント選択（+ 期間選択 + カレンダー）を配置"""
-    if show_period and show_calendar:
-        col_period, _, col_cal, col_client = st.columns([2, 3, 2.5, 2.5])
-    elif show_period:
-        col_period, _, col_client = st.columns([2, 6, 2])
-        col_cal = None
-    elif show_calendar:
-        _, col_cal, col_client = st.columns([5, 2.5, 2.5])
-        col_period = None
+    if show_period:
+        col_period, _, col_cal_btn, col_client = st.columns([2, 4, 1.5, 2.5])
     else:
-        _, col_client = st.columns([8, 2])
-        col_period = None
-        col_cal = None
+        _, col_cal_btn, col_client = st.columns([6.5, 1.5, 2])
 
-    if col_period and show_period:
+    if show_period:
         with col_period:
             period = st.selectbox("期間", list(PERIOD_MAP.keys()),
                                   index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
                                   key=f"period_{key}")
             st.session_state["period"] = period
-    if col_cal and show_calendar:
-        with col_cal:
+
+    with col_cal_btn:
+        with st.popover("カレンダー", use_container_width=True):
             st.markdown(get_calendar_html(), unsafe_allow_html=True)
+
     with col_client:
         selected = st.selectbox("クライアント", get_clients(),
                                 index=get_clients().index(st.session_state["client"]),
@@ -651,7 +645,7 @@ if section == "分析":
         render_client_row("overview")
         exec(open(str(ROOT / "0_overview.py"), encoding="utf-8").read())
     with tab1:
-        render_client_row("summary", show_period=True, show_calendar=True)
+        render_client_row("summary", show_period=True)
         exec(open(str(ROOT / "1_summary.py"), encoding="utf-8").read())
     with tab2:
         render_client_row("platforms", show_period=True)

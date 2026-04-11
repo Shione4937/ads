@@ -259,20 +259,6 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
     object-fit: contain;
 }}
 
-/* ===== クライアントセレクター（タブ直上・右寄せ） ===== */
-div.st-key-client_select_top {{
-    max-width: 160px !important;
-    margin-left: auto !important;
-    margin-bottom: -4px !important;
-}}
-div.st-key-client_select_top [data-baseweb="select"] > div {{
-    background: #ffffff !important;
-    border: 1px solid #e5e7eb !important;
-    font-size: 13px !important;
-    min-height: 32px !important;
-    height: 32px !important;
-    border-radius: 8px !important;
-}}
 
 /* ===== タブ（全幅） ===== */
 [data-testid="stTabs"] {{
@@ -524,7 +510,7 @@ hr {{ border-color: #f3f4f6 !important; }}
 /* ===== Gemini連携予定バッジ ===== */
 .gemini-badge {{
     display: inline-block;
-    background: linear-gradient(135deg, #4285f4 0%, #9b72cb 40%, #d96570 70%, #ffc857 100%);
+    background: linear-gradient(135deg, #4285f4 0%, #4285f4 35%, #9b72cb 60%, #d96570 80%, #ffc857 100%);
     color: #ffffff;
     font-size: 12px;
     font-weight: 700;
@@ -627,6 +613,25 @@ def render_client_selector():
         key="client_select_top",
     )
     st.session_state["client"] = selected_client
+    # CSS をセレクトボックス直後に inject（確実に適用される）
+    st.markdown("""
+    <style>
+    div.st-key-client_select_top {
+        max-width: 160px !important;
+        margin-left: auto !important;
+        margin-top: -8px !important;
+        margin-bottom: -8px !important;
+    }
+    div.st-key-client_select_top [data-baseweb="select"] > div {
+        background: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        font-size: 13px !important;
+        min-height: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 if section == "分析":
     render_client_selector()

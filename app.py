@@ -259,27 +259,18 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
     object-fit: contain;
 }}
 
-/* ===== クライアントセレクター（タブバー右端に固定配置） ===== */
-[data-testid="stHorizontalBlock"]:has(div.st-key-client_select_top) {{
-    height: 0 !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-}}
+/* ===== クライアントセレクター（タブ直上・右寄せ） ===== */
 div.st-key-client_select_top {{
-    position: fixed !important;
-    top: 76px !important;
-    right: 2rem !important;
-    z-index: 100 !important;
-    width: 160px !important;
+    max-width: 160px !important;
+    margin-left: auto !important;
+    margin-bottom: -4px !important;
 }}
 div.st-key-client_select_top [data-baseweb="select"] > div {{
     background: #ffffff !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    border: 1px solid #e5e7eb !important;
     font-size: 13px !important;
-    min-height: 34px !important;
-    height: 34px !important;
+    min-height: 32px !important;
+    height: 32px !important;
     border-radius: 8px !important;
 }}
 
@@ -616,21 +607,19 @@ for col, name in nav_data:
 section = st.session_state["section"]
 
 def render_client_selector():
-    """タブバーの右側にクライアント選択を配置"""
-    _, col_client = st.columns([7.5, 2.5])
-    with col_client:
-        selected_client = st.selectbox(
-            "クライアント選択", get_clients(),
-            index=get_clients().index(st.session_state["client"]),
-            label_visibility="collapsed",
-            key="client_select_top",
-        )
-        st.session_state["client"] = selected_client
+    """タブ直上にクライアント選択をコンパクトに右寄せ配置"""
+    selected_client = st.selectbox(
+        "クライアント選択", get_clients(),
+        index=get_clients().index(st.session_state["client"]),
+        label_visibility="collapsed",
+        key="client_select_top",
+    )
+    st.session_state["client"] = selected_client
 
 if section == "分析":
     render_client_selector()
-    tab0, tab1, tab2, tab3 = st.tabs([
-        "全社一覧", "サマリー", "媒体別詳細", "レポート",
+    tab0, tab1, tab2, tab3, tab4 = st.tabs([
+        "全社一覧", "サマリー", "媒体別詳細", "レポート", "AI分析",
     ])
 
     PERIOD_MAP = {
@@ -661,14 +650,18 @@ if section == "分析":
         exec(open(str(ROOT / "2_platforms.py"), encoding="utf-8").read())
     with tab3:
         exec(open(str(ROOT / "4_report.py"), encoding="utf-8").read())
+    with tab4:
+        exec(open(str(ROOT / "12_ai_analysis.py"), encoding="utf-8").read())
 
 elif section == "広告管理":
     render_client_selector()
-    tab_list, tab_new = st.tabs(["広告一覧", "新規入稿"])
+    tab_list, tab_new, tab_ai = st.tabs(["広告一覧", "新規入稿", "おすすめ広告設定"])
     with tab_list:
         exec(open(str(ROOT / "7_ads_list.py"), encoding="utf-8").read())
     with tab_new:
         exec(open(str(ROOT / "6_submit.py"), encoding="utf-8").read())
+    with tab_ai:
+        exec(open(str(ROOT / "13_ai_recommend.py"), encoding="utf-8").read())
 
 elif section == "予算設定":
     render_client_selector()

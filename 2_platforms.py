@@ -16,9 +16,35 @@ PERIOD_MAP = {
 }
 d_from, d_to = PERIOD_MAP.get(period, ("2026-04-01","2026-04-14"))
 
-# カラーパレット（紫〜ブルー系）
+# カラーパレット（ブランドカラー）
 COLORS = {"google":"#4684ec","yahoo":"#ff0132","meta":"#0b76ed","tiktok":"#4fe5e2"}
 PNAMES = {"google":"Google Ads","yahoo":"Yahoo!広告","meta":"Meta広告","tiktok":"TikTok広告"}
+
+# 媒体タブにブランドカラーを適用
+st.markdown("""
+<style>
+[role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(1)[aria-selected="true"] {
+    background: linear-gradient(135deg, #4684ec, #34a451) !important;
+    color: #fff !important;
+}
+[role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(2)[aria-selected="true"] {
+    background: #ff0132 !important;
+    color: #fff !important;
+}
+[role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(3)[aria-selected="true"] {
+    background: #0b76ed !important;
+    color: #fff !important;
+}
+[role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(4)[aria-selected="true"] {
+    background: linear-gradient(135deg, #4fe5e2, #e62b58) !important;
+    color: #fff !important;
+}
+[role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab-highlight"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown(f"#### 媒体別詳細 — {client}")
 st.caption(f"{d_from} 〜 {d_to}")
 

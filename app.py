@@ -237,7 +237,6 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
     border: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    padding-bottom: 6px !important;
 }}
 /* ナビ内のアイコン画像を縦中央揃え・小さめに */
 [data-testid="column"] [data-testid="column"] [data-testid="stImage"] {{
@@ -261,19 +260,22 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
 }}
 
 /* ===== クライアントセレクター（タブバー右端にオーバーレイ） ===== */
-/* st-keyクラスで確実に当てる */
-[data-testid="stVerticalBlock"] > div:has(> [data-testid="stHorizontalBlock"]:has(div.st-key-client_select_top)) {{
-    margin-bottom: -52px !important;
+[data-testid="stVerticalBlock"] > div:has([data-testid="stHorizontalBlock"] div.st-key-client_select_top) {{
+    margin-top: -8px !important;
+    margin-bottom: -46px !important;
     position: relative !important;
     z-index: 5 !important;
 }}
 div.st-key-client_select_top {{
-    max-width: 180px;
+    max-width: 170px;
     margin-left: auto !important;
 }}
 div.st-key-client_select_top [data-baseweb="select"] > div {{
     background: #ffffff !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    font-size: 13px !important;
+    min-height: 34px !important;
+    height: 34px !important;
 }}
 
 /* ===== タブ（全幅） ===== */
@@ -558,7 +560,7 @@ html body .stApp div.st-key-{b64_key} button[kind="primary"] {{
         linear-gradient(90deg, #06b6d4 0%, #6366f1 50%, #c026d3 100%) !important;
     background-repeat: no-repeat, no-repeat !important;
     background-position: 8px center, 0 100% !important;
-    background-size: 24px 24px, 100% 3px !important;
+    background-size: 24px 24px, 100% 2px !important;
     padding-left: 38px !important;
     padding-right: 10px !important;
 }}
@@ -571,8 +573,8 @@ html body .stApp div.st-key-{b64_key} button p {{
 """
 st.markdown(f"<style>{nav_bg_css}</style>", unsafe_allow_html=True)
 
-# ロゴ + 4ナビ（最後が全体設定）
-col_logo, col_n1, col_n2, col_n3, col_n4 = st.columns([2.4, 1.7, 1.9, 1.9, 2.1])
+# ロゴ + 3ナビ（左寄せ） + スペーサー + 全体設定（右端）
+col_logo, col_n1, col_n2, col_n3, _, col_n4 = st.columns([2.2, 1.1, 1.3, 1.3, 2.8, 1.3])
 
 with col_logo:
     st.markdown("""
@@ -605,7 +607,6 @@ section = st.session_state["section"]
 
 def render_client_selector():
     """タブバーの右側にクライアント選択を配置"""
-    st.markdown('<div class="client-selector-anchor"></div>', unsafe_allow_html=True)
     _, col_client = st.columns([7.5, 2.5])
     with col_client:
         selected_client = st.selectbox(

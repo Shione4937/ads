@@ -64,15 +64,15 @@ SECTION_THEMES = {
         "icon":          "campaign",
     },
     "予算設定": {
-        "primary":       "#10b981",
-        "primary_dark":  "#059669",
-        "primary_light": "#d1fae5",
-        "primary_50":    "#f0fdf4",
-        "gradient":      "linear-gradient(135deg, #34d399, #10b981)",
-        "gradient_soft": "linear-gradient(90deg, #d1fae5 0%, #ccfbf1 50%, #dcfce7 100%)",
-        "underline":     "linear-gradient(90deg, #6ee7b7, #34d399, #14b8a6)",
-        "shadow":        "rgba(16,185,129,0.3)",
-        "shadow_light":  "rgba(16,185,129,0.08)",
+        "primary":       "#f59e0b",
+        "primary_dark":  "#d97706",
+        "primary_light": "#fef3c7",
+        "primary_50":    "#fffbeb",
+        "gradient":      "linear-gradient(135deg, #fbbf24, #f59e0b)",
+        "gradient_soft": "linear-gradient(90deg, #fef3c7 0%, #fed7aa 50%, #fef9c3 100%)",
+        "underline":     "linear-gradient(90deg, #fcd34d, #f59e0b, #f97316)",
+        "shadow":        "rgba(245,158,11,0.3)",
+        "shadow_light":  "rgba(245,158,11,0.08)",
         "icon":          "savings",
     },
     "全体設定": {
@@ -261,8 +261,8 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
 
 /* ===== クライアントセレクター（タブバー右端にオーバーレイ） ===== */
 [data-testid="stVerticalBlock"] > div:has([data-testid="stHorizontalBlock"] div.st-key-client_select_top) {{
-    margin-top: -8px !important;
-    margin-bottom: -46px !important;
+    margin-top: 0px !important;
+    margin-bottom: -42px !important;
     position: relative !important;
     z-index: 5 !important;
 }}
@@ -338,6 +338,7 @@ div.st-key-client_select_top [data-baseweb="select"] > div {{
 [data-testid="stMetricValue"] {{
     color: #1e1b4b !important;
     font-weight: 700 !important;
+    font-size: 20px !important;
 }}
 [data-testid="stMetricDelta"] {{
     font-weight: 500 !important;
@@ -557,7 +558,7 @@ html body .stApp div.st-key-{b64_key} button {{
 html body .stApp div.st-key-{b64_key} button[kind="primary"] {{
     background-image:
         url('data:image/png;base64,{b64}'),
-        linear-gradient(90deg, #06b6d4 0%, #6366f1 50%, #c026d3 100%) !important;
+        {THEME["underline"]} !important;
     background-repeat: no-repeat, no-repeat !important;
     background-position: 8px center, 0 100% !important;
     background-size: 24px 24px, 100% 2px !important;

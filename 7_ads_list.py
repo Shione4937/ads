@@ -42,15 +42,7 @@ if "ads_list" not in st.session_state:
 
 ads = st.session_state["ads_list"].get(client, [])
 
-# ─── ヘッダーアクション ───
-col_info, col_new = st.columns([7, 2])
-with col_info:
-    st.caption(f"登録広告：{len(ads)}件")
-with col_new:
-    if st.button("新規広告を作成", type="primary", use_container_width=True, key="goto_new"):
-        st.session_state["submit_step"] = 1
-        st.session_state["submit_data"] = {}
-        st.info("「新規入稿」タブから作成できます")
+st.caption(f"登録広告：{len(ads)}件")
 
 st.write("")
 

@@ -23,9 +23,9 @@ PNAMES = {"google":"Google","yahoo":"Yahoo!","meta":"Meta","tiktok":"TikTok"}
 # 媒体タブにブランドカラーを適用（本家準拠）
 st.markdown("""
 <style>
-/* Google: 青ベースのグラデーション（ロゴ風） */
+/* Google: 青 */
 [role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(1)[aria-selected="true"] {
-    background: linear-gradient(135deg, #4285F4 0%, #4285F4 40%, #34A853 50%, #FBBC05 70%, #EA4335 100%) !important;
+    background: #4285F4 !important;
     color: #fff !important;
 }
 /* Yahoo: 赤 */

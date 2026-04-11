@@ -648,15 +648,6 @@ def render_client_row(key, show_period=False):
                 month=st.session_state["cal_month"],
             ), unsafe_allow_html=True)
 
-            # 表示する項目を選択（他タブにも引き継ぎ）
-            st.divider()
-            metric = st.selectbox("表示する項目", [
-                "消化金額", "CV", "CPA", "IMP", "クリック", "CTR",
-            ], index=["消化金額","CV","CPA","IMP","クリック","CTR"].index(
-                st.session_state["cal_metric"]
-            ), key=f"metric_{key}")
-            st.session_state["cal_metric"] = metric
-
     with col_client:
         selected = st.selectbox("クライアント", get_clients(),
                                 index=get_clients().index(st.session_state["client"]),

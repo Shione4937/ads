@@ -260,9 +260,10 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
 }}
 
 /* ===== クライアントセレクター（タブバー右端にオーバーレイ） ===== */
-[data-testid="stVerticalBlock"] > div:has([data-testid="stHorizontalBlock"] div.st-key-client_select_top) {{
-    margin-top: 0px !important;
-    margin-bottom: -42px !important;
+/* 広いセレクタで確実に当てる */
+[data-testid="stHorizontalBlock"]:has(div.st-key-client_select_top) {{
+    margin-top: 0 !important;
+    margin-bottom: -46px !important;
     position: relative !important;
     z-index: 5 !important;
 }}
@@ -281,6 +282,10 @@ div.st-key-client_select_top [data-baseweb="select"] > div {{
 /* ===== タブ（全幅） ===== */
 [data-testid="stTabs"] {{
     margin-top: 0 !important;
+}}
+/* タブの選択下線をTHEME色に */
+[data-testid="stTabs"] [data-baseweb="tab-highlight"] {{
+    background-color: {THEME["primary"]} !important;
 }}
 [data-testid="stTabs"] [data-baseweb="tab-list"] {{
     background: {THEME["gradient_soft"]};

@@ -35,8 +35,7 @@ st.markdown(f"""
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:18px;"></span>
         <span style="font-weight:700;color:#4338ca;">AI期間比較コメント</span>
-        <span style="background:linear-gradient(135deg,#7c6bf6,#60a5fa);color:#fff;font-size:10px;
-                     padding:2px 8px;border-radius:6px;font-weight:600;">Gemini連携予定</span>
+        <span class="gemini-badge">Gemini連携予定</span>
     </div>
     <p style="color:#374151;font-size:14px;line-height:1.7;margin:0;">
         期間A（{d_from_a}〜{d_to_a}）vs 期間B（{d_from_b}〜{d_to_b}）の比較：

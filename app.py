@@ -521,6 +521,18 @@ hr {{ border-color: #f3f4f6 !important; }}
     box-shadow: 0 2px 12px {THEME["shadow"]} !important;
 }}
 
+/* ===== Gemini連携予定バッジ ===== */
+.gemini-badge {{
+    display: inline-block;
+    background: linear-gradient(135deg, #4285f4 0%, #9b72cb 40%, #d96570 70%, #ffc857 100%);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+}}
+
 [data-testid="stSidebar"] {{ display: none; }}
 </style>
 """, unsafe_allow_html=True)

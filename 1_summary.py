@@ -52,8 +52,7 @@ st.markdown("""
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:18px;"></span>
         <span style="font-weight:700;color:#4338ca;">AI分析コメント</span>
-        <span style="background:linear-gradient(135deg,#7c6bf6,#60a5fa);color:#fff;font-size:10px;
-                     padding:2px 8px;border-radius:6px;font-weight:600;">Gemini連携予定</span>
+        <span class="gemini-badge">Gemini連携予定</span>
     </div>
     <p style="color:#374151;font-size:14px;line-height:1.7;margin:0;">
 """ + f"""{client}の{period}実績：総費用¥{total_cost:,.0f}に対しCV{total_cv:,}件・平均CPA¥{total_cpa:,.0f}。

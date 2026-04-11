@@ -48,8 +48,7 @@ if goal:
             <span style="font-weight:700;font-size:16px;color:#1e1b4b;">
                 {client} へのAI提案
             </span>
-            <span style="background:#e0f2fe;color:#0284c7;font-size:10px;
-                         padding:2px 8px;border-radius:6px;font-weight:600;">Gemini API連携予定</span>
+            <span class="gemini-badge">Gemini連携予定</span>
         </div>
         """, unsafe_allow_html=True)
 

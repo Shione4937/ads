@@ -32,8 +32,7 @@ with st.container(border=True):
     <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-top:12px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
             <span style="font-weight:700;color:#6366f1;">AI分析コメント</span>
-            <span style="background:#e0e7ff;color:#4338ca;font-size:10px;
-                         padding:2px 8px;border-radius:6px;font-weight:600;">Gemini API連携予定</span>
+            <span class="gemini-badge">Gemini連携予定</span>
         </div>
         <p style="color:#64748b;font-size:13px;line-height:1.7;margin:0;">
             Gemini APIが接続されると、以下のような分析が自動生成されます：<br>
@@ -90,8 +89,7 @@ with st.container(border=True):
     <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-top:12px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
             <span style="font-weight:700;color:#6366f1;">AI改善提案</span>
-            <span style="background:#e0e7ff;color:#4338ca;font-size:10px;
-                         padding:2px 8px;border-radius:6px;font-weight:600;">Gemini API連携予定</span>
+            <span class="gemini-badge">Gemini連携予定</span>
         </div>
         <p style="color:#64748b;font-size:13px;line-height:1.7;margin:0;">
             Gemini APIが接続されると、以下のような提案が自動生成されます：<br>

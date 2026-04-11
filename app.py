@@ -36,6 +36,12 @@ if "submit_step" not in st.session_state:
     st.session_state["submit_step"] = 1
 if "submit_data" not in st.session_state:
     st.session_state["submit_data"] = {}
+if "cal_year" not in st.session_state:
+    st.session_state["cal_year"] = 2026
+if "cal_month" not in st.session_state:
+    st.session_state["cal_month"] = 4
+if "cal_metric" not in st.session_state:
+    st.session_state["cal_metric"] = "消化金額"
 
 # ─── セクション別カラーパレット ───
 SECTION_THEMES = {
@@ -610,11 +616,46 @@ def render_client_row(key, show_period=False):
 
     with col_cal_btn:
         with st.popover("カレンダー", use_container_width=True):
-            period = st.selectbox("表示期間", list(PERIOD_MAP.keys()),
-                                  index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
-                                  key=f"period_{key}")
-            st.session_state["period"] = period
-            st.markdown(get_calendar_html(), unsafe_allow_html=True)
+            # < > で月を移動
+            nav_l, nav_c, nav_r = st.columns([1, 3, 1])
+            with nav_l:
+                if st.button("<", key=f"cal_prev_{key}", use_container_width=True):
+                    m = st.session_state["cal_month"] - 1
+                    if m < 1:
+                        st.session_state["cal_month"] = 12
+                        st.session_state["cal_year"] -= 1
+                    else:
+                        st.session_state["cal_month"] = m
+                    st.rerun()
+            with nav_c:
+                st.markdown(
+                    f"<div style='text-align:center;font-weight:700;font-size:14px;padding:6px 0;'>"
+                    f"{st.session_state['cal_year']}年 {st.session_state['cal_month']}月</div>",
+                    unsafe_allow_html=True)
+            with nav_r:
+                if st.button(">", key=f"cal_next_{key}", use_container_width=True):
+                    m = st.session_state["cal_month"] + 1
+                    if m > 12:
+                        st.session_state["cal_month"] = 1
+                        st.session_state["cal_year"] += 1
+                    else:
+                        st.session_state["cal_month"] = m
+                    st.rerun()
+
+            # カレンダー本体
+            st.markdown(get_calendar_html(
+                year=st.session_state["cal_year"],
+                month=st.session_state["cal_month"],
+            ), unsafe_allow_html=True)
+
+            # 表示する項目を選択（他タブにも引き継ぎ）
+            st.divider()
+            metric = st.selectbox("表示する項目", [
+                "消化金額", "CV", "CPA", "IMP", "クリック", "CTR",
+            ], index=["消化金額","CV","CPA","IMP","クリック","CTR"].index(
+                st.session_state["cal_metric"]
+            ), key=f"metric_{key}")
+            st.session_state["cal_metric"] = metric
 
     with col_client:
         selected = st.selectbox("クライアント", get_clients(),

@@ -108,16 +108,25 @@ def get_budget_progress(client):
     return pd.DataFrame(rows)
 
 
-def get_calendar_html(today=None):
-    """当月カレンダーHTML（今日ハイライト+残日数）を生成"""
+def get_calendar_html(year=None, month=None, today=None):
+    """カレンダーHTML（今日ハイライト+残日数）を生成"""
     if today is None:
         today = TODAY
-    year, month = today.year, today.month
+    if year is None:
+        year = today.year
+    if month is None:
+        month = today.month
+    is_current_month = (year == today.year and month == today.month)
     days_in_month = calendar.monthrange(year, month)[1]
     first_weekday = date(year, month, 1).weekday()  # 0=月
-    elapsed = today.day
-    remaining = days_in_month - elapsed + 1  # 今日を含む
-    progress = round(elapsed / days_in_month * 100, 1)
+    if is_current_month:
+        elapsed = today.day
+        remaining = days_in_month - elapsed + 1
+        progress = round(elapsed / days_in_month * 100, 1)
+    else:
+        elapsed = days_in_month
+        remaining = 0
+        progress = 100.0
 
     month_names = {1:"1月",2:"2月",3:"3月",4:"4月",5:"5月",6:"6月",
                    7:"7月",8:"8月",9:"9月",10:"10月",11:"11月",12:"12月"}
@@ -139,8 +148,8 @@ def get_calendar_html(today=None):
 
     for d in range(1, days_in_month + 1):
         wd = (first_weekday + d - 1) % 7
-        is_today = d == today.day
-        past = d < today.day
+        is_today = is_current_month and d == today.day
+        past = (is_current_month and d < today.day) or not is_current_month
 
         if is_today:
             style = "background:#6366f1;color:#fff;border-radius:50%;font-weight:700;"
@@ -154,13 +163,15 @@ def get_calendar_html(today=None):
         if wd == 6 and d < days_in_month:
             html += '</tr><tr>'
 
-    html += f'''</tr></table>
+    html += '</tr></table>'
+    if is_current_month:
+        html += f'''
         <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:#6b7280;">
             <span>経過 <strong style="color:#1e1b4b;">{elapsed}日</strong></span>
             <span>残 <strong style="color:#1e1b4b;">{remaining}日</strong></span>
             <span>進捗 <strong style="color:#6366f1;">{progress}%</strong></span>
-        </div>
-    </div>'''
+        </div>'''
+    html += '</div>'
     return html
 
 

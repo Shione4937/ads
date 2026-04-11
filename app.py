@@ -259,17 +259,20 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
     object-fit: contain;
 }}
 
-/* ===== クライアントセレクター（タブバー右端にオーバーレイ） ===== */
-/* タブ前に描画して position:top で下にずらし、タブバーに重ねる */
+/* ===== クライアントセレクター（タブバー右端に固定配置） ===== */
 [data-testid="stHorizontalBlock"]:has(div.st-key-client_select_top) {{
-    position: relative !important;
-    top: 46px !important;
-    z-index: 10 !important;
-    margin-bottom: -40px !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
 }}
 div.st-key-client_select_top {{
-    max-width: 170px;
-    margin-left: auto !important;
+    position: fixed !important;
+    top: 76px !important;
+    right: 2rem !important;
+    z-index: 100 !important;
+    width: 160px !important;
 }}
 div.st-key-client_select_top [data-baseweb="select"] > div {{
     background: #ffffff !important;
@@ -277,6 +280,7 @@ div.st-key-client_select_top [data-baseweb="select"] > div {{
     font-size: 13px !important;
     min-height: 34px !important;
     height: 34px !important;
+    border-radius: 8px !important;
 }}
 
 /* ===== タブ（全幅） ===== */

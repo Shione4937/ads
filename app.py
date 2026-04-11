@@ -260,10 +260,10 @@ html body .stApp div.st-key-nav_settings button[kind="primary"] {{
 }}
 
 /* ===== クライアントセレクター（タブバー右端にオーバーレイ） ===== */
-/* 広いセレクタで確実に当てる */
+/* タブの後に描画して負マージンで引き上げ */
 [data-testid="stHorizontalBlock"]:has(div.st-key-client_select_top) {{
-    margin-top: 0 !important;
-    margin-bottom: -46px !important;
+    margin-top: -44px !important;
+    margin-bottom: 6px !important;
     position: relative !important;
     z-index: 5 !important;
 }}
@@ -624,11 +624,10 @@ def render_client_selector():
         st.session_state["client"] = selected_client
 
 if section == "分析":
-    # A社セレクターを先に配置（CSSで右上に位置調整）
-    render_client_selector()
     tab0, tab1, tab2, tab3 = st.tabs([
         "全社一覧", "サマリー", "媒体別詳細", "レポート",
     ])
+    render_client_selector()
 
     PERIOD_MAP = {
         "今月（4月）":   ("2026-04-01","2026-04-14"),
@@ -660,16 +659,16 @@ if section == "分析":
         exec(open(str(ROOT / "4_report.py"), encoding="utf-8").read())
 
 elif section == "広告管理":
-    render_client_selector()
     tab_list, tab_new = st.tabs(["広告一覧", "新規入稿"])
+    render_client_selector()
     with tab_list:
         exec(open(str(ROOT / "7_ads_list.py"), encoding="utf-8").read())
     with tab_new:
         exec(open(str(ROOT / "6_submit.py"), encoding="utf-8").read())
 
 elif section == "予算設定":
-    render_client_selector()
     tab_view, tab_edit = st.tabs(["予算状況", "予算設定"])
+    render_client_selector()
     with tab_view:
         exec(open(str(ROOT / "3_budget.py"), encoding="utf-8").read())
     with tab_edit:

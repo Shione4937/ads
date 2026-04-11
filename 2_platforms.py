@@ -18,14 +18,14 @@ d_from, d_to = PERIOD_MAP.get(period, ("2026-04-01","2026-04-14"))
 
 # カラーパレット（グラフは青系で統一）
 COLORS = {"google":"#60a5fa","yahoo":"#60a5fa","meta":"#60a5fa","tiktok":"#60a5fa"}
-PNAMES = {"google":"Google Ads","yahoo":"Yahoo!広告","meta":"Meta広告","tiktok":"TikTok広告"}
+PNAMES = {"google":"Google","yahoo":"Yahoo!","meta":"Meta","tiktok":"TikTok"}
 
 # 媒体タブにブランドカラーを適用（本家準拠）
 st.markdown("""
 <style>
-/* Google: 青メイン + 赤黄緑アクセント（ロゴの比率に準拠） */
+/* Google: 青ベースのグラデーション（ロゴ風） */
 [role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(1)[aria-selected="true"] {
-    background: linear-gradient(90deg, #4285F4 0%, #4285F4 55%, #EA4335 55%, #EA4335 70%, #FBBC05 70%, #FBBC05 85%, #34A853 85%, #34A853 100%) !important;
+    background: linear-gradient(135deg, #4285F4 0%, #4285F4 40%, #34A853 50%, #FBBC05 70%, #EA4335 100%) !important;
     color: #fff !important;
 }
 /* Yahoo: 赤 */
@@ -38,7 +38,7 @@ st.markdown("""
     background: #0b76ed !important;
     color: #fff !important;
 }
-/* TikTok: 黒 + ネオンシアン/ピンクの縁 */
+/* TikTok: 黒 + ネオン */
 [role="tabpanel"] [data-testid="stTabs"] [data-baseweb="tab"]:nth-of-type(4)[aria-selected="true"] {
     background: #000000 !important;
     color: #fff !important;

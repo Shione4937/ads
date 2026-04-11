@@ -116,7 +116,7 @@ def get_calendar_html(today=None):
     days_in_month = calendar.monthrange(year, month)[1]
     first_weekday = date(year, month, 1).weekday()  # 0=月
     elapsed = today.day
-    remaining = days_in_month - elapsed
+    remaining = days_in_month - elapsed + 1  # 今日を含む
     progress = round(elapsed / days_in_month * 100, 1)
 
     month_names = {1:"1月",2:"2月",3:"3月",4:"4月",5:"5月",6:"6月",

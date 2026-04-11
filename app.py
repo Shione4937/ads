@@ -604,23 +604,20 @@ for col, name in nav_data:
 # ─── セクション別ルーティング ───
 section = st.session_state["section"]
 
-def render_client_row(key, show_period=False, show_calendar=False):
-    """タブ内の先頭行にクライアント選択（+ 期間選択 + カレンダー）を配置"""
-    if show_period:
-        col_period, _, col_cal_btn, col_client = st.columns([2, 4, 1.5, 2.5])
-    else:
-        _, col_cal_btn, col_client = st.columns([6.5, 1.5, 2])
-
-    if show_period:
-        with col_period:
-            period = st.selectbox("期間", list(PERIOD_MAP.keys()),
-                                  index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
-                                  key=f"period_{key}")
-            st.session_state["period"] = period
+def render_client_row(key, show_period=False):
+    """タブ内の先頭行にクライアント選択 + カレンダー（期間選択内蔵）を配置"""
+    _, col_cal_btn, col_client = st.columns([6.5, 1.5, 2])
 
     with col_cal_btn:
         with st.popover("カレンダー", use_container_width=True):
             st.markdown(get_calendar_html(), unsafe_allow_html=True)
+            st.divider()
+            st.markdown("**表示期間**")
+            period = st.radio("期間", list(PERIOD_MAP.keys()),
+                              index=list(PERIOD_MAP.keys()).index(st.session_state["period"]),
+                              key=f"period_{key}",
+                              label_visibility="collapsed")
+            st.session_state["period"] = period
 
     with col_client:
         selected = st.selectbox("クライアント", get_clients(),
@@ -645,10 +642,10 @@ if section == "分析":
         render_client_row("overview")
         exec(open(str(ROOT / "0_overview.py"), encoding="utf-8").read())
     with tab1:
-        render_client_row("summary", show_period=True)
+        render_client_row("summary")
         exec(open(str(ROOT / "1_summary.py"), encoding="utf-8").read())
     with tab2:
-        render_client_row("platforms", show_period=True)
+        render_client_row("platforms")
         exec(open(str(ROOT / "2_platforms.py"), encoding="utf-8").read())
     with tab3:
         render_client_row("report")
